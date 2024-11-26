@@ -1,0 +1,49 @@
+
+/* .custom-label{
+    width: 150px;
+    text-align: right;
+    align-items: end;
+} */
+
+/* .slds-form-element {
+    display: flex;
+}
+.custom-component {
+    width: 100%;
+}
+.custom-component .slds-form-element__label{
+    width: 150px;
+    margin-right: 0px;
+    flex-basis: 100px;
+    text-align: right;
+    align-items: center;
+}
+.custom-component .slds-form-element__control{
+    padding-left: 10px;
+    width: 100%;
+    @media screen and (min-width: 48em) {
+        padding-left: 10px;
+    }
+}
+.d-flex{
+    display: flex;
+}
+
+.flex-container {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+} */
+
+/* .custom-component .slds-form-element__control{
+    padding-left: 10px;
+    width: 100%;
+    @media screen and (min-width: 48em) {
+        padding-left: 10px;
+    }
+} */
+/* @media (min-width: 48em) {
+    .slds-form_horizontal .slds-form-element .slds-form-element__control {
+        padding-left: 0;
+    }
+} */

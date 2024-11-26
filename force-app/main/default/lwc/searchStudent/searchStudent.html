@@ -1,0 +1,130 @@
+<template>
+  <div class="container">
+    <div class="slds-grid slds-wrap">
+      <div class="slds-col slds-size_6-of-12">
+        <!-- Row 1 -->
+        <div class="slds-grid slds-wrap">
+          <div class="slds-col slds-size_3-of-12 slds-text-align_right">
+            <label class="slds-form-element__label" for="firstName">Tên:</label>
+          </div>
+          <div class="slds-col slds-size_9-of-12">
+            <lightning-input
+              name="firstName"
+              variant="label-hidden"
+              placeholder="Tên"
+            >
+            </lightning-input>
+          </div>
+        </div>
+        <!-- Row 2 -->
+        <div class="slds-grid slds-wrap slds-m-top_small">
+          <div class="slds-col slds-size_3-of-12 slds-text-align_right">
+            <label class="slds-form-element__label">Lớp:</label>
+          </div>
+          <div class="slds-col slds-size_9-of-12">
+            <lightning-combobox
+              variant="label-hidden"
+              name="class"
+              value={value}
+              placeholder="Select Progress"
+              options={options}
+              onchange={handleChange}
+            ></lightning-combobox>
+          </div>
+        </div>
+
+        <!-- Row 3 -->
+        <div class="slds-grid slds-wrap slds-m-top_small">
+          <div class="slds-col slds-size_3-of-12 slds-text-align_right">
+            <label class="slds-form-element__label">Ngày sinh:</label>
+          </div>
+          <div class="slds-col slds-size_9-of-12">
+            <div class="slds-grid slds-gutters">
+              <div class="slds-col slds-size_5-of-12">
+                <lightning-input
+                  type="date"
+                  variant="label-hidden"
+                  value={selectedDateTo}
+                  disabled={disabledDates}
+                  placeholder="Từ ngày"
+                ></lightning-input>
+              </div>
+              <div class="slds-col slds-size_2-of-12">
+                <span class="slds-align_absolute-center">~</span>
+              </div>
+              <div class="slds-col slds-size_5-of-12">
+                <lightning-input
+                  type="date"
+                  variant="label-hidden"
+                  value={selectedDateTo}
+                  disabled={disabledDates}
+                  placeholder="Đến ngày"
+                ></lightning-input>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slds-col slds-size_6-of-12 slds-p-left_medium">
+        <div class="slds-checkbox">
+          <input
+            type="checkbox"
+            name="options"
+            id="checkbox-unique-id-81"
+            value="checkbox-unique-id-81"
+            checked=""
+          />
+          <label class="slds-checkbox__label" for="checkbox-unique-id-81">
+            <span class="slds-checkbox_faux"></span>
+            <span class="slds-form-element__label slds-m-left_x-small">Sắp xếp tăng dần theo tên</span>
+          </label>
+        </div>
+      </div>
+    </div>
+    <!-- button -->
+    <div class="slds-grid slds-wrap slds-m-top_small">
+      <div class="slds-col slds-size_6-of-12">
+        <!-- Row 3 -->
+        <div class="slds-grid slds-wrap slds-m-top_small">
+          <div class="slds-col slds-size_3-of-12 slds-text-align_right">
+            <label class="slds-form-element__label"></label>
+          </div>
+          <div class="slds-col slds-size_9-of-12">
+            <div class="slds-grid slds-gutters">
+              <div class="slds-col slds-size_5-of-12">
+                <lightning-button
+                  label="Tìm kiếm"
+                  title="Non-primary action"
+                  onclick={handleClick}
+                ></lightning-button>
+              </div>
+              <div class="slds-col slds-size_2-of-12">
+              </div>
+              <div class="slds-col slds-size_5-of-12">
+                <lightning-button
+                  variant="success"
+                  label="Thêm Mới"
+                  title="Successful action"
+                  onclick={handleClick}
+                 
+                ></lightning-button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slds-col slds-size_6-of-12">
+        <div class="slds-col slds-size_4-of-12 slds-m-top_small slds-m-left_small">
+          <lightning-button
+            variant="destructive"
+            label="Xóa"
+            title="Destructive action"
+            onclick={handleClick}
+            class="slds-m-left_x-small"
+          ></lightning-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

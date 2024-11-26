@@ -1,0 +1,12 @@
+<template>
+    <div class="slds-m-top_medium slds-m-bottom_x-large">
+        <div class="slds-p-around_medium lgc-bg">
+            <lightning-input type="text" label="Enter some text" onchange={handleInputChange}></lightning-input>
+        </div>
+        <input type="text"  onchange={handleInputChange} />
+
+        <div class="slds-m-vertical_medium">
+            <p>The value of the input field is: <span class="slds-text-heading_small">{textValue}</span></p>
+        </div>
+    </div>
+</template>
