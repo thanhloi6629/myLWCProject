@@ -1,71 +1,77 @@
-import { LightningElement } from 'lwc';
+import { LightningElement, track } from 'lwc';
+// import getAccounts from'@salesforce/apex/AccountController.getAccounts';
+import getStudents from'@salesforce/apex/StudentController.getStudents';
 
+  const students = [
+    {
+        id: '003171931112854375',
+        firstName__c: 'Amy',
+        lastName__c: 'Taylor',
+        date: '2021-05-04',
+        gender: 'Nam',
+        diem1: 1,
+        diem2: 2,
+        diem3: 4,
+        diemTB: 4,
+        status: 'Đậu',
+    },
+    {
+        id: '003171931112854372',
+        firstName__c: 'Amy2',
+        lastName__c: 'FHai',
+        date: '2021-05-02',
+        gender: 'Nam',
+        diem1: 1,
+        diem2: 2,
+        diem3: 4,
+        diemTB: 4,
+        status: 'Rớt',
+    
+    },
+    {
+        id: '003171931112854373',
+        firstName__c: 'Hai',
+        lastName__c: 'hac',
+        date: '2021-05-04',
+        gender: 'Nam',
+        diem1: 1,
+        diem2: 2,
+        diem3: 2,
+        diemTB: 4,
+        status: 'Rớt',
+    },
+    
+  ];
+  const columns = [
+    { label: 'id', fieldName: 'code__c' },
+    { label: 'First Name', fieldName: 'firstName__c' },
+    { label: 'Last Name', fieldName: 'lastName__c' },
+    { label: 'Date', fieldName: 'date__c' },
+    { label: 'Gender', fieldName: 'gender__C'},
+    { label: 'Diem1', fieldName: 'diem1__c'},
+    { label: 'Diem2', fieldName: 'diem2__c'},
+    { label: 'Diem3', fieldName: 'diem3__c'},
+    { label: 'DiemTB', fieldName: 'diemTB__c'},
+    { label: 'Status', fieldName: 'status__c' },
+  ];
 export default class StudentList extends LightningElement {
-  data = [];
-  contacts = [
-    {
-        Id: '003171931112854375',
-        FirstName: 'Amy',
-        LastName: 'Taylor',
-        Date: '2021-05-04',
-        Gender: 'Nam',
-        DTB: 7,
-        Status: 'Đậu',
-        Diem1: 1,
-        Diem2: 2,
-        Diem3: 4,
-        DiemTB: 4,
-        TinhTrang: 'Đậu'
-    },
-    {
-        Id: '003171931112854372',
-        FirstName: 'Amy2',
-        LastName: 'FHai',
-        Date: '2021-05-02',
-        Gender: 'Nam',
-        DTB: 10,
-        Status: 'Rớt',
-        Diem1: 1,
-        Diem2: 2,
-        Diem3: 4,
-        DiemTB: 4,
-        TinhTrang: 'Đậu'
-    
-    },
-    {
-        Id: '003171931112854373',
-        FirstName: 'Hai',
-        LastName: 'hac',
-        Date: '2021-05-04',
-        Gender: 'Nam',
-        DTB: 8,
-        Status: 'Rớt',
-        Diem1: 1,
-        Diem2: 2,
-        Diem3: 2,
-        DiemTB: 4,
-        TinhTrang: 'Đậu'
-    },
-    
-  ];
-  columns = [
-    { label: 'First Name', fieldName: 'FirstName' },
-    { label: 'Last Name', fieldName: 'LastName' },
-    { label: 'Gender', fieldName: 'Gender'},
-    { label: 'DTB', fieldName: 'DTB' },
-    { label: 'Status', fieldName: 'Status' },
-    { label: 'Diem1', fieldName: 'Diem1'},
-    { label: 'Diem2', fieldName: 'Diem2'},
-    { label: 'Diem3', fieldName: 'Diem3'},
-    { label: 'DiemTB', fieldName: 'DiemTB'},
-    { label: 'TinhTrang', fieldName: 'TinhTrang'},
-    { label: 'Action', name: 'Action', 
-      type: 'action'}
-
-
-  ];
+  columns = columns;
+  @track students = students;
+  lstStudent = [];
   connectedCallback ()  {
-    this.data = this.contacts;
+    this.getStudentsList();
+
+    
+    // console.log('data std: ' +  JSON.stringify(this.payLoadData));
+    console.log('không in được giá trị lstAccount trong hàm connectedCallback');
+
+  }  
+  getStudentsList(){
+    getStudents().then((result) => {
+      console.log('student:', JSON.stringify(result));
+      this.lstStudent = result;
+      return result;
+    }).catch((err) => { console.log(err)});
   }
 }
 

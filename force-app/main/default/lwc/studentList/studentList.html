@@ -1,38 +1,18 @@
 <template>
-        <!-- <c-common-input></c-common-input>     -->
-        <c-add-student-modal></c-add-student-modal>
-        <c-search-student></c-search-student>
-        <template for:each={contacts} for:item="contact">
-        <div  key={contact.Id} class="m-1">
-            <lightning-card>
-                <p class="slds-p-horizontal_small">Họ: {contact.FirstName}</p>
-                <p class="slds-p-horizontal_small">Tên: {contact.LastName}</p>
-                <p class="slds-p-horizontal_small">Date: {contact.Date}</p>
-                <p class="slds-p-horizontal_small">Diem2: {contact.Diem2}</p>
-                <p class="slds-p-horizontal_small">Diem2: {contact.Diem2}</p>
-                <p class="slds-p-horizontal_small">Diem3: {contact.Diem3}</p>
-                <p class="slds-p-horizontal_small">DiemTB: {contact.DiemTB}</p>
-                <p class="slds-p-horizontal_small">TinhTrang: {contact.TinhTrang}</p>
-            </lightning-card>
-        </div>
-        </template>
+  <!-- <c-common-input></c-common-input>     -->
+  <!-- <c-add-student-modal></c-add-student-modal> -->
+  <c-search-student></c-search-student>
+  <!-- <c-table-student student={payLoadData}></c-table-student> -->
+  <c-table-student column={columns} student={lstStudent}></c-table-student>
 
-        <lightning-card>
-            <lightning-button label="New" slot="actions"></lightning-button>
-        </lightning-card>
-    <div style="height: 300px;">
-        <lightning-datatable
-                key-field="id"
-                data={data}
-                columns={columns}>
-        </lightning-datatable>
-    </div>
-
-    <!-- <lightning-card title="Account List" icon-name="standard:account">
-        <lightning-datatable 
-            key-field="Id" 
-            data={accounts} 
-            columns={contacts}>
-        </lightning-datatable>
-    </lightning-card> -->
+  <!-- <template if:true={lstStudent}>
+    <template for:each={lstStudent} for:item="account">
+      <div key={account.code__c} class="slds-box slds-m-around_small">
+        <p><strong>Tên:</strong> {account.Name}</p>
+        <p><strong>Ngành:</strong> {account.code__c}</p>
+        <p><strong>Điện thoại:</strong> {account.firstName__c}</p>
+        <p><strong>Điểm 2:</strong> {account.diem2__c}</p>
+      </div>
+    </template>
+  </template> -->
 </template>

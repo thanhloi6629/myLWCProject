@@ -1,0 +1,157 @@
+<template>
+  <table
+    aria-multiselectable="true"
+    class="slds-table slds-table_cell-buffer slds-table_bordered slds-m-top_small"
+    aria-labelledby="element-with-table-label other-element-with-table-label"
+  >
+    <thead>
+      <tr class="slds-line-height_reset">
+        <th
+          class="slds-text-align_right slds-cell_action-mode"
+          scope="col"
+          style="width: 3.25rem"
+        >
+          <span id="column-group-header" class="slds-assistive-text"
+            >Choose a row</span
+          >
+          <div class="slds-th__action slds-th__action_form">
+            <div class="slds-checkbox">
+              <input
+                type="checkbox"
+                name="options"
+                id="checkbox-unique-id-321"
+                value="checkbox-unique-id-321"
+                tabindex="0"
+                aria-labelledby="check-select-all-label column-group-header"
+              />
+              <label
+                class="slds-checkbox__label"
+                for="checkbox-unique-id-321"
+                id="check-select-all-label"
+              >
+                <span class="slds-checkbox_faux"></span>
+                <span class="slds-form-element__label slds-assistive-text"
+                  >Select All</span
+                >
+              </label>
+            </div>
+          </div>
+        </th>
+        <template for:each={column} for:item="student">
+          <th key={student.fieldName} class="m-1">
+            <div class="slds-truncate" title={student.label}>
+              {student.label}
+            </div>
+          </th>
+        </template>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- <template for:each={contacts} for:item="contact">
+                <tr key={contact.Id} class="slds-hint-parent">
+                    <template for:each={columns} for:item="column">
+                        <td key={column.id} data-label={column.fieldName}>
+                            <div class="slds-truncate" title={getContactField(contact, column.fieldName)}>{getContactField(contact, column.fieldName)}</div>
+                        </td>
+                    </template>
+                </tr>
+            </template> -->
+
+      <template for:each={student} for:item="column">
+        <tr
+          aria-selected="false"
+          key={column.code__c}
+          class="slds-line-height_reset"
+        >
+          <td
+            class="slds-text-align_center slds-cell_action-mode"
+            role="gridcell"
+          >
+            <div class="slds-checkbox">
+              <input
+                type="checkbox"
+                name="options"
+                id="checkbox-01"
+                value="checkbox-01"
+                tabindex="0"
+                aria-labelledby="check-button-label-01 column-group-header"
+              />
+              <label
+                class="slds-checkbox__label"
+                for="checkbox-01"
+                id="check-button-label-01"
+              >
+                <span class="slds-checkbox_faux"></span>
+                <span class="slds-form-element__label slds-assistive-text"
+                  >Select item 1</span
+                >
+              </label>
+            </div>
+          </td>
+          <td class="m-1">
+            <div class="slds-truncate" title="Cloudhub">
+              <a href="#" tabindex="-1">{column.code__c}</a>
+            </div>
+          </td>
+          <td class="m-1">
+            <div class="slds-truncate" title="Cloudhub">
+              <a href="#" tabindex="-1">{column.firstName__c}</a>
+            </div>
+          </td>
+          <td class="m-1">
+            <div class="slds-truncate" title="Cloudhub">
+              <a href="#" tabindex="-1">{column.lastName__c}</a>
+            </div>
+          </td>
+          <td class="m-1">
+            <div class="slds-truncate" title="Cloudhub">
+              <a href="#" tabindex="-1">{column.birthday__c}</a>
+            </div>
+          </td>
+          <td class="m-1">
+            <div class="slds-truncate" title="Cloudhub">
+              <a href="#" tabindex="-1">{column.gender__c}</a>
+            </div>
+          </td>
+
+          <td class="m-1">
+            <div class="slds-truncate" title="Cloudhub">
+              <a href="#" tabindex="-1">{column.diem1__c}</a>
+            </div>
+          </td>
+          <td class="m-1">
+            <div class="slds-truncate" title="Cloudhub">
+              <a href="#" tabindex="-1">{column.diem2__c}</a>
+            </div>
+          </td>
+          <td class="m-1">
+            <div class="slds-truncate" title="Cloudhub">
+              <a href="#" tabindex="-1">{column.diem3__c}</a>
+            </div>
+          </td>
+          <td class="m-1">
+            <div class="slds-truncate" title="Cloudhub">
+              <a href="#" tabindex="-1">{column.diemTB__c}</a>
+            </div>
+          </td>
+          <td class="m-1">
+            <div class="slds-truncate" title="Cloudhub">
+              <a href="#" tabindex="-1">{column.status__c}</a>
+            </div>
+          </td>
+          <td class="m-1">
+            <div class="slds-truncate" title="Cloudhub">
+              <a href="#" tabindex="-1">Cập Nhật</a>
+            </div>
+          </td>
+          <td class="m-1">
+            <div class="slds-truncate" title="Cloudhub">
+              <a href="#" tabindex="-1">Xóa</a>
+            </div>
+          </td>
+        </tr>
+      </template>
+    </tbody>
+  </table>
+  <!-- <c-pagination-component records = {data.students}></c-pagination-component> -->
+</template>
