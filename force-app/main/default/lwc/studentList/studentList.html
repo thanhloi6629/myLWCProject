@@ -1,18 +1,9 @@
 <template>
-  <!-- <c-common-input></c-common-input>     -->
-  <!-- <c-add-student-modal></c-add-student-modal> -->
-  <c-search-student></c-search-student>
-  <!-- <c-table-student student={payLoadData}></c-table-student> -->
+  <c-search-student onmessageevent={handleMessage} onopenmodal={handleOpenModal}></c-search-student>
   <c-table-student column={columns} student={lstStudent}></c-table-student>
+  <p>Message from child: { receivedMessage.name}</p>
+  <p>Message from child: { receivedMessage.age}</p>
 
-  <!-- <template if:true={lstStudent}>
-    <template for:each={lstStudent} for:item="account">
-      <div key={account.code__c} class="slds-box slds-m-around_small">
-        <p><strong>Tên:</strong> {account.Name}</p>
-        <p><strong>Ngành:</strong> {account.code__c}</p>
-        <p><strong>Điện thoại:</strong> {account.firstName__c}</p>
-        <p><strong>Điểm 2:</strong> {account.diem2__c}</p>
-      </div>
-    </template>
-  </template> -->
+  <c-add-student-modal ismodalopen={isModalOpen} onclosemodal={handleCloseModal}></c-add-student-modal>
+ 
 </template>

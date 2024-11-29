@@ -1,35 +1,85 @@
 <template>
-    <lightning-button label="Add Student" onclick={openModal}>
+  <template if:true={ismodalopen}>
+    <section
+      role="dialog"
+      tabindex="-1"
+      aria-labelledby="modal-heading-01"
+      aria-modal="true"
+      aria-describedby="modal-content-id-1"
+      class="slds-modal slds-fade-in-open"
+    >
+      <div class="slds-modal__container">
+        <header class="slds-modal__header">
+          <button
+            class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+            title="Close"
+            onclick={closeModal}
+          >
+            <lightning-icon
+              icon-name="utility:close"
+              alternative-text="close"
+              variant="inverse"
+              size="small"
+            ></lightning-icon>
+            <span class="slds-assistive-text">Close</span>
+          </button>
+          <h2
+            id="modal-heading-01"
+            class="slds-text-heading_medium slds-hyphenate"
+          >
+            Add Student
+          </h2>
+        </header>
+        <div
+          class="slds-modal__content slds-p-around_medium"
+          id="modal-content-id-1"
+        >
+          <lightning-record-edit-form
+            object-api-name="Student__c"
+            onsuccess={handleSuccess}
+            onsubmit={handleSubmit}
+          >
+            <lightning-messages></lightning-messages>
+            <lightning-input-field field-name="Name"></lightning-input-field>
+            <lightning-input-field
+              required="false"
+              field-name="firstName__c"
+            ></lightning-input-field>
+            <lightning-input-field
+              field-name="lastName__c"
+            ></lightning-input-field>
+            <lightning-input-field
+              field-name="birthday__c"
+            ></lightning-input-field>
+            <lightning-input-field
+              field-name="gender__c"
+            ></lightning-input-field>
+            <lightning-input-field
+              field-name="diem1__c"
+            ></lightning-input-field>
+            <lightning-input-field
+              field-name="diem2__c"
+            ></lightning-input-field>
+            <lightning-input-field
+              field-name="diem3__c"
+            ></lightning-input-field>
+            <lightning-input-field
+              field-name="grade__c"
+            ></lightning-input-field>
 
-    </lightning-button>
-    <template if:true={isModalOpen}>
-        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
-            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
-            <div class="slds-modal__container">
-                <header class="slds-modal__header">
-                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
-                        title="Close" onclick={closeModal}>
-                        <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse"
-                            size="small"></lightning-icon>
-                        <span class="slds-assistive-text">Close</span>
-                    </button>
-                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Add Student</h2>  
-                </header>
-                <!-- <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
-                    <lightning-record-edit-form object-api-name="Student__c" onsuccess={handleSuccess}>
-                            <lightning-messages></lightning-messages>
-                            <lightning-input-field field-name="Name"></lightning-input-field>
-                            <lightning-input-field field-name="Email__c"></lightning-input-field>
-                            <lightning-input-field field-name="Address__c"></lightning-input-field>
-                            <lightning-input-field field-name="Phone__c"></lightning-input-field>
-                            <div class="slds-text-align_right">
-                                <lightning-button class="slds-m-top_small" variant="brand" type="submit" name="save"
-                                    label="Save"></lightning-button>
-                            </div>
-                    </lightning-record-edit-form>
-                </div> -->
+            <div class="slds-text-align_right">
+              <lightning-button
+                class="slds-m-top_small"
+                variant="brand"
+                type="submit"
+                name="save"
+                label="Save"
+              ></lightning-button>
             </div>
-        </section>
-        <div class="slds-backdrop slds-backdrop_open"></div>
-    </template>
+          </lightning-record-edit-form>
+        </div>
+      </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+  </template>
 </template>
