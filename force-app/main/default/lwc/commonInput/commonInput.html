@@ -1,12 +1,36 @@
 <template>
-    <div class="slds-m-top_medium slds-m-bottom_x-large">
-        <div class="slds-p-around_medium lgc-bg">
-            <lightning-input type="text" label="Enter some text" onchange={handleInputChange}></lightning-input>
-        </div>
-        <input type="text"  onchange={handleInputChange} />
-
-        <div class="slds-m-vertical_medium">
-            <p>The value of the input field is: <span class="slds-text-heading_small">{textValue}</span></p>
-        </div>
-    </div>
+  <lightning-card>
+      <lightning-layout>
+        <lightning-layout-item padding="around-small">
+          <lightning-button-icon
+            icon-name="utility:dash"
+            alternative-text="decrement"
+            title="decrement"
+            onclick={handleDecrease}
+            variant="brand"
+          ></lightning-button-icon>
+        </lightning-layout-item>
+        <lightning-layout-item padding="around-small">
+          <lightning-input
+            variant="label-hidden"
+            type="number"
+            value={value}
+            label={label}
+            name={name}
+            onchange={handleChange}
+            class="number-input"
+          ></lightning-input>
+        </lightning-layout-item>
+        <lightning-layout-item padding="around-small">
+          <lightning-button-icon
+            icon-name="utility:add"
+            alternative-text="Increase"
+            onclick={handleIncrease}
+            variant="brand"
+          ></lightning-button-icon>
+        </lightning-layout-item>
+      </lightning-layout>
+  </lightning-card>
 </template>
+
+

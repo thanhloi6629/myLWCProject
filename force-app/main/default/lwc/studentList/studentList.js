@@ -41,7 +41,7 @@ const students = [
   }
 ];
 const columns = [
-  { label: "id", fieldName: "code__c" },
+  { label: "Code", fieldName: "code__c" },
   { label: "First Name", fieldName: "firstName__c" },
   { label: "Last Name", fieldName: "lastName__c" },
   { label: "Date", fieldName: "date__c" },
@@ -57,14 +57,16 @@ export default class StudentList extends LightningElement {
   @track students = students;
   lstStudent = [];
   @track isModalOpen = false;
+  @track isModalOpenCustom = false;
+  objSubmit = {};
 
   connectedCallback() {
     this.getStudentsList();
     // console.log('data std: ' +  JSON.stringify(this.payLoadData));
     console.log("không in được giá trị lstAccount trong hàm connectedCallback");
   }
-  getStudentsList() {
-    getStudents()
+   async getStudentsList() {
+    await getStudents()
       .then((result) => {
         this.lstStudent = result;
         return result;
@@ -81,8 +83,30 @@ export default class StudentList extends LightningElement {
   handleOpenModal(event) {
     this.isModalOpen = event.detail.isOpenModal;
   }
+  
   handleCloseModal() {
-    console.log("chayvaokhong");
     this.isModalOpen = false;
   }
+
+  handleOpenModalCustom(event) {
+    console.log('event.detail.isOpenModalCustom' + JSON.stringify(  event.detail.isOpenModalCustom));
+    this.isModalOpenCustom = event.detail.isOpenModalCustom;
+    if(!this.objSubmit.id){
+      this.objSubmit = {};
+    }
+  }
+
+  handleCloseModalCustom() {
+    this.isModalOpenCustom = false;
+  }
+
+  handleEditStudent(event) {
+    console.log('C-vaoday-handleEditStudent', event.detail);
+    console.log('event.detail' + JSON.stringify(event.detail));
+    // this.isModalOpen = true;
+    this.isModalOpenCustom = true;
+    // const a = {...event.detail};
+    // console.log('object a: ' + JSON.stringify(a));
+    this.objSubmit = event.detail;
+  } 
 }

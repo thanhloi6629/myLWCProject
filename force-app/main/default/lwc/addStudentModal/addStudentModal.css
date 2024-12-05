@@ -1,3 +1,7 @@
 .slds-modal__container {
     max-width: 50rem;
 }
+:host {
+    --slds-c-checkbox-toggle-switch-color-background: orange;
+    --slds-c-checkbox-color-background-checked: green;
+}

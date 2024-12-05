@@ -1,9 +1,6 @@
 <template>
-  <c-search-student onmessageevent={handleMessage} onopenmodal={handleOpenModal}></c-search-student>
-  <c-table-student column={columns} student={lstStudent}></c-table-student>
-  <p>Message from child: { receivedMessage.name}</p>
-  <p>Message from child: { receivedMessage.age}</p>
-
+  <c-search-student onmessageevent={handleMessage} onopenmodal={handleOpenModal} onopenmodalcustom={handleOpenModalCustom}></c-search-student>
+  <c-table-student column={columns} student={lstStudent} oneditstudent={handleEditStudent}></c-table-student>
   <c-add-student-modal ismodalopen={isModalOpen} onclosemodal={handleCloseModal}></c-add-student-modal>
- 
+  <c-add-Student ismodalopen={isModalOpenCustom} onclosemodal={handleCloseModalCustom} objsubmit={objSubmit}></c-add-Student>
 </template>

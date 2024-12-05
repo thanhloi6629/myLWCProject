@@ -38,4 +38,11 @@ export default class SearchStudent extends LightningElement {
      })
     );
   }
+  openModalCustom() {
+    this.dispatchEvent(
+      new CustomEvent("openmodalcustom", { 
+        detail: { isOpenModalCustom: true }
+     })
+    );
+  }
 }

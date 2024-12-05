@@ -77,7 +77,9 @@
           />
           <label class="slds-checkbox__label" for="checkbox-unique-id-81">
             <span class="slds-checkbox_faux"></span>
-            <span class="slds-form-element__label slds-m-left_x-small">Sắp xếp tăng dần theo tên</span>
+            <span class="slds-form-element__label slds-m-left_x-small"
+              >Sắp xếp tăng dần theo tên</span
+            >
           </label>
         </div>
       </div>
@@ -99,8 +101,7 @@
                   onclick={handleClick}
                 ></lightning-button>
               </div>
-              <div class="slds-col slds-size_2-of-12">
-              </div>
+              <div class="slds-col slds-size_2-of-12"></div>
               <div class="slds-col slds-size_5-of-12">
                 <lightning-button
                   variant="success"
@@ -114,13 +115,25 @@
         </div>
       </div>
       <div class="slds-col slds-size_6-of-12">
-        <div class="slds-col slds-size_4-of-12 slds-m-top_small slds-m-left_small">
+        <div
+          class="slds-col slds-size_4-of-12 slds-m-top_small slds-m-left_small"
+        >
           <lightning-button
             variant="destructive"
             label="Xóa"
             title="Destructive action"
             onclick={handleClick}
             class="slds-m-left_x-small"
+          ></lightning-button>
+        </div>
+        <div
+          class="slds-col slds-size_4-of-12 slds-m-top_small slds-m-left_small"
+        >
+          <lightning-button
+            variant="success"
+            label="Thêm Mới Custom"
+            title="Successful action"
+            onclick={openModalCustom}
           ></lightning-button>
         </div>
       </div>

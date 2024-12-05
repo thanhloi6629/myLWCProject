@@ -1,7 +1,7 @@
 import { LightningElement, api } from "lwc";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import addStudent from "@salesforce/apex/StudentController.addStudent";
-import FirstName from "@salesforce/schema/Contact.FirstName";
+// import FirstName from "@salesforce/schema/Contact.FirstName";
 
 export default class AddStudentModal extends LightningElement {
   // @track isModalOpen = false;
