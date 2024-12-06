@@ -1,23 +1,9 @@
 import { LightningElement, api } from "lwc";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import addStudent from "@salesforce/apex/StudentController.addStudent";
-// import FirstName from "@salesforce/schema/Contact.FirstName";
 
 export default class AddStudentModal extends LightningElement {
-  // @track isModalOpen = false;
   @api ismodalopen;
-
-  connectedCallback() {
-    console.log("isModalOpen-addd", this.ismodalopen);
-  }
-
-  renderedCallback() {
-    console.log("isModalOpen-addd-123", this.ismodalopen);
-  }
-
-  closeModal() {
-    this.dispatchEvent(new CustomEvent("closemodal"));
-  }
 
   handleSuccess() {
     const selectedEvent = new ShowToastEvent({
@@ -42,8 +28,7 @@ export default class AddStudentModal extends LightningElement {
       diem3: fields.diem3__c,
       grade: fields.grade__C
     })
-      .then((result) => {
-        console.log("result", result);
+      .then(() => {
         this.handleSuccess();
         this.closeModal();
       })

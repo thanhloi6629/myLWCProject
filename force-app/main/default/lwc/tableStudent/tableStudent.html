@@ -90,6 +90,11 @@
           </td>
           <td class="m-1">
             <div class="slds-truncate" title="Cloudhub">
+              <a href="#" tabindex="-1">{column.Name}</a>
+            </div>
+          </td>
+          <td class="m-1">
+            <div class="slds-truncate" title="Cloudhub">
               <a href="#" tabindex="-1">{column.code__c}</a>
             </div>
           </td>
@@ -141,12 +146,12 @@
           </td>
           <td class="m-1">
             <div class="slds-truncate" title="Cloudhub">
-              <a href="#" tabindex="-1" onclick={handleEdit} data-id={column.code__c}>Cập Nhật</a>
+              <a href="#" tabindex="-1" onclick={handleEdit} data-id={column.Id}>Cập Nhật</a>
             </div>
           </td>
           <td class="m-1">
             <div class="slds-truncate" title="Cloudhub">
-              <a href="#" tabindex="-1">Xóa</a>
+              <a href="#" tabindex="-1" data-id={column.Id} onclick={handleDelete}>Xóa</a>
             </div>
           </td>
         </tr>

@@ -5,6 +5,7 @@ public with sharing class StudentController {
       SELECT
         Id,
         code__c,
+        Name,
         firstName__c,
         lastName__c,
         status__c,
@@ -14,7 +15,6 @@ public with sharing class StudentController {
         diemTB__c,
         gender__c,
         birthday__c,
-        Name,
         grade__c
       FROM Student__c
     ];
@@ -38,7 +38,7 @@ public with sharing class StudentController {
       Grade__c  gradeRecord  = [SELECT Id FROM Grade__c WHERE code__c = :grade LIMIT 1];
 
       Student__c student = new Student__c(
-        name = (String) studentData.get('name'),
+        Name = (String) studentData.get('Name'),
         firstName__c =  (String) studentData.get('firstName__c'),
         lastName__c = (String) studentData.get('lastName__c'),
         birthday__c = studentData.containsKey('birthday__c') ? (Date) studentData.get('birthday__c') : null,
@@ -108,6 +108,7 @@ public with sharing class StudentController {
     String grade
   ) {
     try {
+      System.debug('name: ' + name);
       Student__c student = [SELECT Id FROM Student__c WHERE Id = :id LIMIT 1];
         student.Name = name;
         student.firstName__c = firstName;
@@ -125,6 +126,17 @@ public with sharing class StudentController {
     } catch (Exception e) {
       // Ghi log lỗi và ném Exception để xử lý ở frontend
       System.debug('Error: ' + e.getMessage());
+      throw new AuraHandledException(e.getMessage());
+    }
+  }
+
+  @AuraEnabled
+  public static string deleteStudent(String Id){
+    try {
+      Student__c student = [SELECT Id FROM Student__c WHERE Id = :Id LIMIT 1];
+      delete student;
+      return 'success';
+    } catch (Exception e) {
       throw new AuraHandledException(e.getMessage());
     }
   }

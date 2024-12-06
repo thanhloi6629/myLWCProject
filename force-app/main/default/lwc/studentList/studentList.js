@@ -1,6 +1,8 @@
 import { LightningElement, track } from "lwc";
 // import getAccounts from'@salesforce/apex/AccountController.getAccounts';
 import getStudents from "@salesforce/apex/StudentController.getStudents";
+import deleteStudent from "@salesforce/apex/StudentController.deleteStudent";
+import { ShowToastEvent } from "lightning/platformShowToastEvent";
 
 const students = [
   {
@@ -42,6 +44,7 @@ const students = [
 ];
 const columns = [
   { label: "Code", fieldName: "code__c" },
+  { label: "Name", fieldName: "Name" },
   { label: "First Name", fieldName: "firstName__c" },
   { label: "Last Name", fieldName: "lastName__c" },
   { label: "Date", fieldName: "date__c" },
@@ -62,9 +65,8 @@ export default class StudentList extends LightningElement {
 
   connectedCallback() {
     this.getStudentsList();
-    // console.log('data std: ' +  JSON.stringify(this.payLoadData));
-    console.log("không in được giá trị lstAccount trong hàm connectedCallback");
   }
+
    async getStudentsList() {
     await getStudents()
       .then((result) => {
@@ -74,10 +76,6 @@ export default class StudentList extends LightningElement {
       .catch((err) => {
         console.log(err);
       });
-  }
-  receivedMessage = {};
-  handleMessage(event) {
-    this.receivedMessage = event.detail;
   }
 
   handleOpenModal(event) {
@@ -89,11 +87,7 @@ export default class StudentList extends LightningElement {
   }
 
   handleOpenModalCustom(event) {
-    console.log('event.detail.isOpenModalCustom' + JSON.stringify(  event.detail.isOpenModalCustom));
     this.isModalOpenCustom = event.detail.isOpenModalCustom;
-    if(!this.objSubmit.id){
-      this.objSubmit = {};
-    }
   }
 
   handleCloseModalCustom() {
@@ -101,12 +95,27 @@ export default class StudentList extends LightningElement {
   }
 
   handleEditStudent(event) {
-    console.log('C-vaoday-handleEditStudent', event.detail);
-    console.log('event.detail' + JSON.stringify(event.detail));
-    // this.isModalOpen = true;
     this.isModalOpenCustom = true;
-    // const a = {...event.detail};
-    // console.log('object a: ' + JSON.stringify(a));
-    this.objSubmit = event.detail;
+    console.log('L-handleEditStudent', {... event.detail});
+    this.objSubmit = {... event.detail} ;
   } 
+
+  handleDeleteStudent(event) {
+    const Id = event.detail.Id;
+      deleteStudent({Id: Id}).then(() => {
+      this.handleDeleteSuccess();
+      }).catch((err) => {
+      console.log(err)
+    })
+  }
+
+  handleDeleteSuccess() {
+    this.dispatchEvent(
+      new ShowToastEvent({
+        title: "Success",
+        message: "Student Delete successfully!",
+        variant: "success"
+      })
+    );
+  }
 }
