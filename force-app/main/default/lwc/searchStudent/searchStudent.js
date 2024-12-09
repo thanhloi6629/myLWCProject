@@ -1,34 +1,32 @@
-import { LightningElement } from "lwc";
+import { LightningElement, api} from "lwc";
 
 export default class SearchStudent extends LightningElement {
+  @api gradeOptions;
   value = "inProgress";
   selectedDateFrom;
   selectedDateTo;
   disabledDates = false;
+  objSearch = {};
   handleClick() {
-    this.disabledDates = !this.disabledDates;
-
-    const data = {
-      name: "John Doe",
-      age: 25
-    };
-
-    const customEvent = new CustomEvent("messageevent", {
-      detail: data
+    // this.disabledDates = !this.disabledDates;
+    const customEvent = new CustomEvent("eventsearch", {
+      detail: this.objSearch,
     });
 
     this.dispatchEvent(customEvent);
   }
-  get options() {
-    return [
-      { label: "New", value: "new" },
-      { label: "In Progress", value: "inProgress" },
-      { label: "Finished", value: "finished" }
-    ];
-  }
+  // get options() {
+  //   return [
+  //     { label: "New", value: "new" },
+  //     { label: "In Progress", value: "inProgress" },
+  //     { label: "Finished", value: "finished" }
+  //   ];
+  // }
 
   handleChange(event) {
     this.value = event.detail.value;
+    const name = event.target.name;
+    this.objSearch[name]=event.detail.value;
   }
 
   openModal() {

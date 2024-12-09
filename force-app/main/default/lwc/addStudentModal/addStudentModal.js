@@ -3,7 +3,7 @@ import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import addStudent from "@salesforce/apex/StudentController.addStudent";
 
 export default class AddStudentModal extends LightningElement {
-  @api ismodalopen;
+  @api isModalOpen;
 
   handleSuccess() {
     const selectedEvent = new ShowToastEvent({

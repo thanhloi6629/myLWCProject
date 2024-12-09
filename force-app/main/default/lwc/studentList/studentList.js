@@ -3,6 +3,8 @@ import { LightningElement, track } from "lwc";
 import getStudents from "@salesforce/apex/StudentController.getStudents";
 import deleteStudent from "@salesforce/apex/StudentController.deleteStudent";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
+import getGrades from "@salesforce/apex/StudentController.getGrades";
+import getSearchedData from "@salesforce/apex/StudentController.getSearchedData";
 
 const students = [
   {
@@ -61,10 +63,42 @@ export default class StudentList extends LightningElement {
   lstStudent = [];
   @track isModalOpen = false;
   @track isModalOpenCustom = false;
-  objSubmit = {};
+  objEdit = {};
+  gradeOptions =[]
 
   connectedCallback() {
     this.getStudentsList();
+    this.getGradesList();
+  }
+
+  handleSearch(event) {
+     getSearchedData({ name: event.detail.name, grade: event.detail.grade, fromDate: event.detail.fromDate, toDate: event.detail.toDate}).then((result) => {
+      if(result.length === 0) { 
+        this.lstStudent = [];
+        return;
+      }
+      this.lstStudent = result;
+    }).catch((err) => {
+      console.log('err', err);
+    });
+  //  this.lstStudent = 
+  }
+    
+
+
+  async getGradesList() {
+    await getGrades()
+      .then((result) => {
+        this.gradeOptions = result.map((grade) => {
+          return {
+            label: grade.Name,
+            value: grade.Id
+          };
+        });
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
   }
 
    async getStudentsList() {
@@ -92,12 +126,14 @@ export default class StudentList extends LightningElement {
 
   handleCloseModalCustom() {
     this.isModalOpenCustom = false;
+    this.objEdit = {};
+    console.log("L-closeModalCustom", this.objEdit);
   }
 
   handleEditStudent(event) {
     this.isModalOpenCustom = true;
     console.log('L-handleEditStudent', {... event.detail});
-    this.objSubmit = {... event.detail} ;
+    this.objEdit = {... event.detail} ;
   } 
 
   handleDeleteStudent(event) {

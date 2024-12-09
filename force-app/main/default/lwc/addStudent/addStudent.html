@@ -1,5 +1,5 @@
 <template>
-  <template if:true={ismodalopen}>
+  <template if:true={isModalOpen}>
     <section
       role="dialog"
       tabindex="-1"
@@ -49,7 +49,7 @@
                   placeholder="name"
                   min-length="5"
                   name="Name"
-                  value={objsubmit.Name}
+                  value={objEdit.Name}
                   message-when-value-missing="Không nhập ăn đấm nha"
                   message-when-too-short="Nhập ít nhất 5 characters."
                   onchange={handleChange}
@@ -72,7 +72,7 @@
                   placeholder="First name"
                   data-id="firstName"
                   name="firstName__c"
-                   value={objsubmit.firstName__c}
+                   value={objEdit.firstName__c}
                   message-when-value-missing="Không nhập ăn đấm nha"
                   onchange={handleChange}
                 >
@@ -91,7 +91,7 @@
                   variant="label-hidden"
                   label="Last name"
                   name="lastName__c"
-                  value={objsubmit.lastName__c}
+                  value={objEdit.lastName__c}
                   placeholder="Last name"
                   required
                   message-when-value-missing="Không nhập ăn đấm nha"
@@ -112,9 +112,10 @@
                   variant="label-hidden"
                   name="gender__c"
                   label="Gender"
-                  value={objsubmit.gender__c}
+                  value={objEdit.gender__c}
                   placeholder="Select Gender"
-                  message-when-value-missing="Không nhập ăn đấm nha"
+                  message-when-value-missing="Chọn giới tính dùm"
+                  required
                   options={genderOptions}
                   onchange={handleChange}
                 ></lightning-combobox>
@@ -133,9 +134,11 @@
                   type="date"
                   label="Birthday"
                   name="birthday__c"
-                  value={objsubmit.birthday__c}
+                  value={objEdit.birthday__c}
                   placeholder="Select a date"
                   onchange={handleChange}
+                  message-when-value-missing="Nhập điểm toán dùm cái"
+                  required
                 ></lightning-input>
               </div>
             </div>
@@ -153,7 +156,7 @@
                   min="0" 
                   max="100" 
                   step="2" 
-                  value={objsubmit.diem1}
+                  value={objEdit.diem1}
                   onchange={handleChange}>
                 </c-common-input> -->
                 <lightning-input
@@ -162,7 +165,9 @@
                   name="diem1__c" 
                   min="0" 
                   max="10" 
-                  value={objsubmit.diem1__c}
+                  value={objEdit.diem1__c}
+                  message-when-value-missing="Nhập điểm toán dùm cái"
+                  required
                   onchange={handleChange}>
                 ></lightning-input>
               </div>
@@ -179,8 +184,10 @@
                   variant="label-hidden"
                   type="number"
                   name="diem2__c"
-                  value={objsubmit.diem2__c}
+                  value={objEdit.diem2__c}
                   placeholder="Điểm Lý"
+                  message-when-value-missing="Nhập điểm lý dùm cái"
+                  required
                   onchange={handleChange}
                 ></lightning-input>
               </div>
@@ -197,8 +204,10 @@
                   variant="label-hidden"
                   type="number"
                   name="diem3__c"
-                   value={objsubmit.diem3__c}
+                  value={objEdit.diem3__c}
                   placeholder="Điểm Hóa"
+                  message-when-value-missing="Nhập điểm hóa dùm cái"
+                  required
                   onchange={handleChange}
                 ></lightning-input>
               </div>
@@ -215,9 +224,11 @@
                 <lightning-combobox
                   variant="label-hidden"
                   name="grade__c"
-                  value={objsubmit.grade__c}
+                  value={objEdit.grade__c}
                   placeholder="Lớp"
                   options={gradeOptions}
+                  message-when-value-missing="Chọn lớp dùm"
+                  required
                   onchange={handleChange}
                 ></lightning-combobox>
               </div>
