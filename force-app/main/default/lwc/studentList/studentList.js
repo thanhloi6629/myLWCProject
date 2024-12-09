@@ -65,6 +65,8 @@ export default class StudentList extends LightningElement {
   @track isModalOpenCustom = false;
   objEdit = {};
   gradeOptions =[]
+  isConfirmModalOpen = false;
+  idDelete ;
 
   connectedCallback() {
     this.getStudentsList();
@@ -136,13 +138,27 @@ export default class StudentList extends LightningElement {
     this.objEdit = {... event.detail} ;
   } 
 
-  handleDeleteStudent(event) {
-    const Id = event.detail.Id;
-      deleteStudent({Id: Id}).then(() => {
+  handleCancel() {
+    this.isConfirmModalOpen = false; // Đóng modal khi nhấn Hủy
+  }
+
+  handleConfirm() {
+    this.isConfirmModalOpen = false; // Đóng modal
+    // Thực hiện logic xóa
+    deleteStudent({Id: this.idDelete}).then((result) => {
+      console.log('result', result);
       this.handleDeleteSuccess();
+      this.getStudentsList();
       }).catch((err) => {
       console.log(err)
     })
+    console.log('Record has been deleted!');
+}
+
+  handleDeleteStudent(event) {
+    this.isConfirmModalOpen = true; //Mở modal khi bấm delete
+    this.idDelete = event.detail;
+     
   }
 
   handleDeleteSuccess() {

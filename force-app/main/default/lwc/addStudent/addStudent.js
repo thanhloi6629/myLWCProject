@@ -44,11 +44,12 @@ export default class AddStudent extends LightningElement {
   }
 
   handleSubmit() {
-    this.handleEnableValidate()
+    if(this.handleEnableValidate()) return;
     console.log("'L---objEdit", JSON.stringify(this.objEdit));
     console.log("'L---objAdd", JSON.stringify(this.objAdd));
 
     if (!this.objEdit.Id) {
+      console.log('chay vao insert ròi')
       addStudent({
         name: this.objAdd.Name,
         firstName: this.objAdd.firstName__c,
@@ -61,11 +62,14 @@ export default class AddStudent extends LightningElement {
         grade: this.objAdd.grade__c
       })
         .then((result) => {
+          console.log('result',result)
           this.handleAddSuccess();
           this.closeModal();
+          // Gọi callback từ cha để refresh dữ liệu
+          this.dispatchEvent(new CustomEvent("refreshdata"));
         })
         .catch((error) => {
-          console.log("error", error);
+          this.handleError(error);
         });
     } else {
       editStudent({
@@ -84,9 +88,10 @@ export default class AddStudent extends LightningElement {
           console.log("result", result);
           this.handleEditSuccess();
           this.closeModal();
+          this.dispatchEvent(new CustomEvent("refreshdata"));
         })
         .catch((error) => {
-          console.log("error", error);
+          this.handleError(error);
         });
     }
 
@@ -99,6 +104,15 @@ export default class AddStudent extends LightningElement {
     //   .catch((error) => {
     //     console.log("error", error);
     //   });
+  }
+
+  handleError(error) { 
+    const errException = error.body.pageErrors[0].message; 
+    if(error.body.pageErrors) {
+      this.showToast("Error", errException, "error");
+      return;
+    }
+    this.showToast("Error", error.body.message, "error");
   }
 
   showToast(title, message, variant) {
@@ -160,18 +174,36 @@ export default class AddStudent extends LightningElement {
 
   handleEnableValidate() {
     let valid = true; //
-    const inputs = this.template.querySelectorAll("lightning-input, lightning-combobox");
+    const inputs = this.template.querySelectorAll(
+      "lightning-input, lightning-combobox"
+    );
+    // const inputField = this.template.querySelector('[data-id="studentName"]'); sử dụng data-id="studentName" 
     inputs.forEach((input) => {
       // Hiển thị thông báo lỗi nếu không hợp lệ
+      console.log("input-validate", input);
+
+      if (input.dataset.id === "diem1__c" || input.dataset.id === "diem2__c" || input.dataset.id === "diem3__c") { 
+        const diem = parseInt(input.value, 10);
+
+        if (isNaN(diem) || diem > 10 ) {
+            input.setCustomValidity('DIEM PHAI NHO HON 10'); //hiển thị được trực tiếp dười input
+        } else {
+            input.setCustomValidity(''); // Không có lỗi
+        }
+    }
+
       if (!input.checkValidity()) {
+        // Hiển thị lỗi tùy chỉnh bằng setCustomValidity.
         input.reportValidity(); // Kích hoạt hiển thị thông báo lỗi
+        // ageField.setCustomValidity('Tuổi phải nằm trong khoảng từ 18 đến 60');
         valid = false;
       }
     });
     if (!valid) {
-      console.log("theem moiws");
-    } else {
-      // Add your code here to handle the case when the form is valid
-    }
+      console.log("Form không hợp lệ");
+      return true;
+    } 
+    console.log("Form hợp lệ");
+    return false;
   }
 }

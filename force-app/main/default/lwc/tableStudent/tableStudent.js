@@ -6,6 +6,7 @@ export default class TableStudent extends LightningElement {
 
     handleEdit (event){
         const Id = event.currentTarget.dataset.id;
+        console.log('Id-table-edit', Id);
         const studentData = this.student.find(student => student.Id === Id);
         const editEvent = new CustomEvent('editstudent', {detail: studentData});
         this.dispatchEvent(editEvent);
@@ -13,6 +14,7 @@ export default class TableStudent extends LightningElement {
     
     handleDelete (event){
         const Id = event.currentTarget.dataset.id;
+        console.log('Id-table', Id);
         const deleteEvent = new CustomEvent('deletestudent', {detail: Id});
         this.dispatchEvent(deleteEvent);
     }

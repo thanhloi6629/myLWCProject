@@ -80,8 +80,7 @@ public with sharing class StudentController {
     String gender,
     String grade
   ) {
-    try {
-      Grade__c gradeRecord = [
+    Grade__c gradeRecord = [
         SELECT Id
         FROM Grade__c
         WHERE Id = :grade
@@ -103,11 +102,42 @@ public with sharing class StudentController {
       insert student;
       System.debug('data inserted: ' + student.Id);
       return student.Id;
-    } catch (Exception e) {
-      // Ghi log lỗi và ném Exception để xử lý ở frontend
-      System.debug('Error: ' + e.getMessage());
-      throw new AuraHandledException(e.getMessage());
-    }
+    // try {
+    //   Grade__c gradeRecord = [
+    //     SELECT Id
+    //     FROM Grade__c
+    //     WHERE Id = :grade
+    //     LIMIT 1
+    //   ];
+    //   System.debug('gradeRecord: ' + gradeRecord);
+    //   Student__c student = new Student__c(
+    //     name = name,
+    //     firstName__c = firstName,
+    //     lastName__c = lastName,
+    //     birthday__c = birthday,
+    //     diem1__c = diem1,
+    //     diem2__c = diem2,
+    //     diem3__c = diem2,
+    //     gender__c = gender,
+    //     grade__c = gradeRecord.Id
+    //   );
+
+    //   insert student;
+    //   System.debug('data inserted: ' + student.Id);
+    //   return student.Id;
+    // } catch (PositionException e) {
+    //   System.debug('variable: ' + e);
+    //   throw new AuraHandledException(e.getMessage());
+    //   // Ghi log lỗi và ném Exception để xử lý ở frontend
+    //   // throw new PositionException('Position record could not be inserted.', e);
+    //   // System.debug('Error: ' + e.getMessage());
+    //   // throw new AuraHandledException(e.getMessage());
+    // }
+    //  catch (Exception e) {
+    //   System.debug('variable2: ' + e);
+    //   return e.getMessage();
+    //   // throw new AuraHandledException('Có lỗi xảy ra: ' + e.getMessage());
+    // }
   }
 
   @AuraEnabled
@@ -123,8 +153,6 @@ public with sharing class StudentController {
     String gender,
     String grade
   ) {
-    try {
-      System.debug('name: ' + name);
       Student__c student = [SELECT Id FROM Student__c WHERE Id = :id LIMIT 1];
       student.Name = name;
       student.firstName__c = firstName;
@@ -139,22 +167,13 @@ public with sharing class StudentController {
       update student;
       System.debug('data inserted: ' + student.Id);
       return student.Id;
-    } catch (Exception e) {
-      // Ghi log lỗi và ném Exception để xử lý ở frontend
-      System.debug('Error: ' + e.getMessage());
-      throw new AuraHandledException(e.getMessage());
-    }
   }
 
   @AuraEnabled
   public static string deleteStudent(String Id) {
-    try {
-      Student__c student = [SELECT Id FROM Student__c WHERE Id = :Id LIMIT 1];
-      delete student;
-      return 'success';
-    } catch (Exception e) {
-      throw new AuraHandledException(e.getMessage());
-    }
+    Student__c student = [SELECT Id FROM Student__c WHERE Id = :Id LIMIT 1];
+    delete student;
+    return 'success';
   }
 
   @AuraEnabled
@@ -199,9 +218,6 @@ public with sharing class StudentController {
     }
   }
 
-
-  trigger StudentTrigger on Student__c (before insert, before update) {
-
-  }
-
+  public class PositionException extends Exception {}
 }
+
