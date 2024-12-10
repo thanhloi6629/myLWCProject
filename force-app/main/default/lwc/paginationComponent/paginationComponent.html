@@ -1,29 +1,64 @@
 <template>
-    <div class="slds-m-around_medium">
-        <!-- Display records for the current page -->
-        <template for:each={paginatedRecords} for:item="record">
-            <div key={record.Id} class="slds-box slds-box_x-small slds-m-bottom_small">
-                <p>{record.Name}</p> <!-- Customize this for your data fields -->
-            </div>
-        </template>
+  <div class="slds-m-around_medium">
+    <!-- Display records for the current page -->
 
-        <!-- Pagination controls -->
-        <div class="slds-grid slds-grid_align-center slds-m-top_medium">
-            <lightning-button 
-                label="Previous" 
-                onclick={handlePrevious} 
-                disabled={isPreviousDisabled}
-                class="slds-m-right_small">
-            </lightning-button>
+    <template for:each={paginatedRecords} for:item="record">
+      <div
+        key={record.Id}
+        class="slds-box slds-box_x-small slds-m-bottom_small"
+      >
+        <p>{record.Name}</p>
+        <!-- Customize this for your data fields -->
+      </div>
+    </template>
 
-            <span>Page {currentPage} of {totalPages}</span>
+    <!-- Pagination controls -->
+    <div class="slds-align_absolute-center page-data-container slds-theme_default">
+      <lightning-button
+        label="Trang Đầu"
+        onclick={handleFirstPage}
+        disabled={isPreviousDisabled}
+        class="slds-m-right_small"
+      >
+      </lightning-button>
+      <lightning-button-icon
+        alternative-text="Previous"
+        onclick={handlePrevious}
+        class="slds-float_left"
+        icon-class="slds-m-around_medium"
+        icon-name="utility:chevronleft"
+        disabled={isPreviousDisabled}
+        variant="bare"
+      ></lightning-button-icon>
 
-            <lightning-button 
-                label="Next" 
-                onclick={handleNext} 
-                disabled={isNextDisabled}
-                class="slds-m-left_small">
-            </lightning-button>
-        </div>
+      <template for:each={pages} for:item="page">
+        <lightning-button
+          key={page.number}
+          label={page.number}
+          class={page.class}
+          data-page={page.number}
+          onclick={handlePageClick}
+        >
+        </lightning-button>
+      </template>
+
+      <lightning-button-icon
+        alternative-text="Next"
+        class="slds-float_right"
+        disabled={isNextDisabled}
+        icon-class="slds-m-around_medium"
+        icon-name="utility:chevronright"
+        onclick={handleNext}
+        variant="bare"
+      >
+      </lightning-button-icon>
+      <lightning-button
+        label="Trang Cuối"
+        onclick={handleLastPage}
+        disabled={isNextDisabled}
+        class="slds-m-left_small"
+      >
+      </lightning-button>
     </div>
+  </div>
 </template>

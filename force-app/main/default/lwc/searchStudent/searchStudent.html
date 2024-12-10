@@ -109,11 +109,11 @@
               <div class="slds-col slds-size_2-of-12"></div>
               <div class="slds-col slds-size_5-of-12">
                 <lightning-button
-                  variant="success"
-                  label="Thêm Mới"
-                  title="Successful action"
-                  onclick={openModal}
-                ></lightning-button>
+                variant="success"
+                label="Thêm Mới"
+                title="Successful action"
+                onclick={openModalCustom}
+              ></lightning-button>
               </div>
             </div>
           </div>
@@ -134,12 +134,14 @@
         <div
           class="slds-col slds-size_4-of-12 slds-m-top_small slds-m-left_small"
         >
-          <lightning-button
-            variant="success"
-            label="Thêm Mới Custom"
-            title="Successful action"
-            onclick={openModalCustom}
-          ></lightning-button>
+          <div class="slds-col slds-size_5-of-12">
+            <!-- <lightning-button
+              variant="success"
+              label="Thêm Mới"
+              title="Successful action"
+              onclick={openModal}
+            ></lightning-button> -->
+          </div>
         </div>
       </div>
     </div>

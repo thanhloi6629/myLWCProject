@@ -1,6 +1,7 @@
 <template>
   <c-search-student oneventsearch={handleSearch} onopenmodal={handleOpenModal} onopenmodalcustom={handleOpenModalCustom} grade-options={gradeOptions}></c-search-student>
   <c-table-student column={columns} student={lstStudent} oneditstudent={handleEditStudent} ondeletestudent={handleDeleteStudent}></c-table-student>
+  <c-pagination-component records={lstStudent} page-number={pageNumber} page-size={pageSize total-pages={totalPages} onchangepagenumber={changePageNumber}></c-pagination-component>
   <c-add-student-modal is-modal-open={isModalOpen} onclosemodal={handleCloseModal}></c-add-student-modal>
   <c-add-Student is-modal-open={isModalOpenCustom} onclosemodal={handleCloseModalCustom} obj-edit={objEdit} onrefreshdata={getStudentsList}></c-add-Student>
   <c-delete-confirmation

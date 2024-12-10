@@ -14,6 +14,10 @@ export default class AddStudentModal extends LightningElement {
     this.dispatchEvent(selectedEvent);
   }
 
+  closeModal() {
+    this.dispatchEvent(new CustomEvent("closemodal"));
+  }
+
   handleSubmit(event) {
     event.preventDefault(); // stop the form from submitting
     const fields = event.detail.fields;

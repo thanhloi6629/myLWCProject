@@ -21,6 +21,29 @@ public with sharing class StudentController {
   }
 
   @AuraEnabled
+  public static List<Student__c> getStudentsPagination(Integer pageSize, Integer pageNumber) {
+    return [
+      SELECT
+        Id,
+        code__c,
+        Name,
+        firstName__c,
+        lastName__c,
+        status__c,
+        diem1__c,
+        diem2__c,
+        diem3__c,
+        diemTB__c,
+        gender__c,
+        birthday__c,
+        grade__c
+      FROM Student__c
+      LIMIT :pageSize
+      OFFSET :pageNumber
+    ];
+  }
+
+  @AuraEnabled
   public static List<Grade__c> getGrades() {
     return [
       SELECT Id, Name

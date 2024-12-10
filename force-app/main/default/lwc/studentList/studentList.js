@@ -5,6 +5,7 @@ import deleteStudent from "@salesforce/apex/StudentController.deleteStudent";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import getGrades from "@salesforce/apex/StudentController.getGrades";
 import getSearchedData from "@salesforce/apex/StudentController.getSearchedData";
+import getStudentsPagination from "@salesforce/apex/StudentController.getStudentsPagination"
 
 const students = [
   {
@@ -66,11 +67,15 @@ export default class StudentList extends LightningElement {
   objEdit = {};
   gradeOptions =[]
   isConfirmModalOpen = false;
-  idDelete ;
-
+  idDelete;
+  pageNumber = 1;
+  pageSize = 2;
+  totalPages = 3;
+ 
   connectedCallback() {
-    this.getStudentsList();
+    // this.getStudentsList();
     this.getGradesList();
+    this.getStudentsListPagination(this.pageSize, (this.pageNumber - 1) * this.pageSize);
   }
 
   handleSearch(event) {
@@ -86,7 +91,11 @@ export default class StudentList extends LightningElement {
   //  this.lstStudent = 
   }
     
-
+  changePageNumber(event) {
+    console.log("L-event", event.detail);
+    this.pageNumber = event.detail;
+    this.getStudentsListPagination(this.pageSize, (this.pageNumber - 1) * this.pageSize);
+  }
 
   async getGradesList() {
     await getGrades()
@@ -103,8 +112,18 @@ export default class StudentList extends LightningElement {
       });
   }
 
-   async getStudentsList() {
-    await getStudents()
+  // async getStudentsList() {
+  //   await getStudents()
+  //     .then((result) => {
+  //       this.lstStudent = result;
+  //       return result;
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }
+  async getStudentsListPagination(pageSize, pageNumber) {
+    await getStudentsPagination({ pageSize, pageNumber })
       .then((result) => {
         this.lstStudent = result;
         return result;
