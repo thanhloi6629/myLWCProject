@@ -1,0 +1,5 @@
+.active {
+    color: var(--slds-c-button-text-color-active, var(--sds-c-button-text-color-active, var(--lwc-brandAccessibleActive, rgba(53, 93, 150, 1))));
+    background-color: var(--slds-c-button-color-background-active);
+    border-color: var(--slds-c-button-color-border-active);
+}

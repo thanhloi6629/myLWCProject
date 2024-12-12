@@ -33,11 +33,12 @@
 
       <template for:each={pages} for:item="page">
         <lightning-button
-          key={page.number}
+          key={page.key}
           label={page.number}
           class={page.class}
           data-page={page.number}
           onclick={handlePageClick}
+          disabled={page.isEllipsis}
         >
         </lightning-button>
       </template>

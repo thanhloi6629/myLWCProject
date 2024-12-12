@@ -1,9 +1,9 @@
 import { LightningElement, api, track } from 'lwc';
 
 export default class PaginationComponent extends LightningElement {
-    @api pageSize;
-    @api totalPages;
+    _totalPage;
     _pageNumber = [];
+    @api pageSize;
     @track pages = [];  /// danh sách số trang
     @api
     get pageNumber() {
@@ -11,6 +11,15 @@ export default class PaginationComponent extends LightningElement {
     }
     set pageNumber(pageNumber) {
         this._pageNumber = pageNumber;
+    }
+
+    @api
+    get totalPage() {
+        return this._totalPage;
+    }
+    set totalPage(totalPage) {
+        this._totalPage = totalPage;
+        this.calculatePages();
     }
 
     dispatchPageChangeEvent() {
@@ -22,21 +31,72 @@ export default class PaginationComponent extends LightningElement {
     }
 
     calculatePages() {
-       this.pages = Array.from({ length: this.totalPages }, (_, i) => {
-            const page = i + 1;
-            return {
-                number: page,
-                class: `slds-button page-number ${page === this.pageNumber ? 'active' : ''}`,
-            };
+        this.pages = [];
+        // Luôn thêm trang đầu tiên
+        this.pages.push({
+            key: 'page-1',
+            number: 1,
+            isEllipsis: false,
+            // class: `slds-button page-number ${this.pageNumber === 1 ? 'active' : ''}`,
         });
+    
+        // Tính khoảng hiển thị xung quanh `pageNumber`
+        const startPage = Math.max(2, this.pageNumber - 2); // Bắt đầu từ trang hiện tại - 2 (tối thiểu là 2)
+        const endPage = Math.min(this.totalPage - 1, this.pageNumber + 2); // Kết thúc tại trang hiện tại + 2 (tối đa là trang cuối - 1)
+        // Thêm dấu "..." nếu khoảng cách giữa trang đầu và `startPage` lớn hơn 1
+        if (startPage > 2) {
+            this.pages.push({
+                key: 'ellipsis-start',
+                number: '...',
+                isEllipsis: true,
+                // class: 'slds-button page-number disabled',
+            });
+        }
+    
+        // Thêm các trang trong khoảng `startPage` đến `endPage`
+        for (let i = startPage; i <= endPage; i++) {
+            this.pages.push({
+                key: `page-${i}`,
+                number: i,
+                isEllipsis: false,
+                class: `slds-button page-number ${i === this.pageNumber ? 'active' : ''}`,
+            });
+        }
+    
+        // Thêm dấu "..." nếu khoảng cách giữa `endPage` và trang cuối lớn hơn 1
+        if (endPage < this.totalPage - 1) {
+            this.pages.push({
+                key: 'ellipsis-end',
+                number: '...',
+                isEllipsis: true,
+                class: 'slds-button page-number disabled',
+            });
+        }
+    
+        // Luôn thêm trang cuối cùng nếu tổng số trang > 1
+        if (this.totalPage > 1) {
+            this.pages.push({
+                key: `page-${this.totalPage}`,
+                number: this.totalPage,
+                isEllipsis: false,
+                class: `slds-button page-number ${this.pageNumber === this.totalPage ? 'active' : ''}`,
+            });
+        }
     }
+    
 
      // Xử lý khi nhấn số trang
     handlePageClick(event) {
-        const selectedPage = Number(event.target.label);
-        if (selectedPage !== this.pageNumber) {
+        const selectedPagelabel = Number(event.target.label);
+        const selectedPage = Number(event.target.dataset.page);
+        console.log('selectedPage', selectedPage);
+        console.log('selectedPage-selectedPagelabel', selectedPagelabel);
+
+        if (!isNaN(selectedPage) && selectedPage !== this.pageNumber) {
             this._pageNumber = selectedPage;
             this.dispatchPageChangeEvent();
+            this.calculatePages()
+
         }
     }
     // Đặt class cho số trang hiện tại
@@ -44,20 +104,12 @@ export default class PaginationComponent extends LightningElement {
         return page === this.pageNumber ? 'slds-button slds-button_brand' : 'slds-button slds-button_neutral';
     }
 
-    
-    get formattedPages() {
-        return this._pages.map(page => ({
-            number: page,
-            class: this.getPageClass(page)
-        }));
-    }
-        
 
     // connectedCallback() {
     //     console.log('P-student', JSON.stringify(this.student));
     //     console.log('P-pageSize', this._items);
     //     if (this.student && this.student.length > 0) {
-    //         this.totalPages = Math.ceil(this.student.length / this.pageSize);
+    //         this.totalPage = Math.ceil(this.student.length / this.pageSize);
     //         this.updatePaginatedstudent();
     //     }
     // }
@@ -66,22 +118,40 @@ export default class PaginationComponent extends LightningElement {
         if (this.pageNumber > 1) {
             this._pageNumber -= 1
             this.dispatchPageChangeEvent();
+            this.calculatePages();
+             // active pagNumber tiếp theo
+             console.log('prev-this.pageNumber', this.pageNumber);
+            // this.handleActivePageNumber();
+        }
+    }
+    
+    handleNext () {
+        if (this.pageNumber < this.totalPage) {
+            this._pageNumber += 1;
+            this.dispatchPageChangeEvent();
+            this.calculatePages();
+            console.log('nextButton-this.pageNumber', this.pageNumber);
+            // active pagNumber tiếp theo
+            // this.handleActivePageNumber();
+           
         }
     }
 
-    handleNext () {
-        if (this.pageNumber < this.totalPages) {
-            this._pageNumber += 1;
-            this.dispatchPageChangeEvent();
+    handleActivePageNumber () {
+        const nextButton = this.template.querySelector(`lightning-button[data-page="${this.pageNumber}"]`);
+        console.log('nextButton', nextButton);
+        if (nextButton) {
+            nextButton.click(); // Kích hoạt sự kiện click
         }
-    }
+    } 
+
     handleFirstPage () {
         this._pageNumber = 1;
         this.dispatchPageChangeEvent();
     }
 
     handleLastPage () {
-        this._pageNumber = this.totalPages;
+        this._pageNumber = this.totalPage;
         this.dispatchPageChangeEvent();
     }
 
@@ -92,7 +162,7 @@ export default class PaginationComponent extends LightningElement {
 
     // Check if Next button should be disabled
     get isNextDisabled() {
-        return this.pageNumber === this.totalPages;
+        return this.pageNumber === this.totalPage;
     }
 
 }

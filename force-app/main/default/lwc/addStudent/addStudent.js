@@ -34,7 +34,7 @@ export default class AddStudent extends LightningElement {
   async renderedCallback() {
     console.log("L-objEdit", JSON.stringify(this.objEdit));
   }
-
+  // Tạo kiểu pakageList trên salesForce
   get genderOptions() {
     return [
       { label: "Nam", value: "Nam" },
@@ -88,7 +88,7 @@ export default class AddStudent extends LightningElement {
           console.log("result", result);
           this.handleEditSuccess();
           this.closeModal();
-          this.dispatchEvent(new CustomEvent("refreshdata"));
+          // this.dispatchEvent(new CustomEvent("refreshdata"));
         })
         .catch((error) => {
           this.handleError(error);

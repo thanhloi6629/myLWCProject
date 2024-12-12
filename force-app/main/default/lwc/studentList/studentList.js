@@ -1,11 +1,11 @@
 import { LightningElement, track } from "lwc";
 // import getAccounts from'@salesforce/apex/AccountController.getAccounts';
-import getStudents from "@salesforce/apex/StudentController.getStudents";
+// import getStudents from "@salesforce/apex/StudentController.getStudents";
 import deleteStudent from "@salesforce/apex/StudentController.deleteStudent";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import getGrades from "@salesforce/apex/StudentController.getGrades";
-import getSearchedData from "@salesforce/apex/StudentController.getSearchedData";
-import getStudentsPagination from "@salesforce/apex/StudentController.getStudentsPagination"
+import getStudentsPagination from "@salesforce/apex/StudentController.getStudentsPagination";
+import deleteStudentByIds from "@salesforce/apex/StudentController.deleteStudentByIds";
 
 const students = [
   {
@@ -46,57 +46,63 @@ const students = [
   }
 ];
 const columns = [
-  { label: "Code", fieldName: "code__c" },
-  { label: "Name", fieldName: "Name" },
-  { label: "First Name", fieldName: "firstName__c" },
-  { label: "Last Name", fieldName: "lastName__c" },
-  { label: "Date", fieldName: "date__c" },
-  { label: "Gender", fieldName: "gender__C" },
-  { label: "Diem1", fieldName: "diem1__c" },
-  { label: "Diem2", fieldName: "diem2__c" },
-  { label: "Diem3", fieldName: "diem3__c" },
-  { label: "DiemTB", fieldName: "diemTB__c" },
-  { label: "Status", fieldName: "status__c" }
+  { label: "Mã", fieldName: "code__c" },
+  { label: "Hõ và Tên", fieldName: "Name" },
+  { label: "Hõ", fieldName: "firstName__c" },
+  { label: "Tên", fieldName: "lastName__c" },
+  { label: "Ngày Sinh", fieldName: "date__c" },
+  { label: "Giới Tính", fieldName: "gender__C" },
+  { label: "Diểm Toán", fieldName: "diem1__c" },
+  { label: "Điểm Lý", fieldName: "diem2__c" },
+  { label: "Điểm Hóa", fieldName: "diem3__c" },
+  { label: "Điểm TB", fieldName: "diemTB__c" },
+  { label: "Trạng Thái", fieldName: "status__c" }
 ];
 export default class StudentList extends LightningElement {
   columns = columns;
-  @track students = students;
   lstStudent = [];
+  @track students = students;
   @track isModalOpen = false;
   @track isModalOpenCustom = false;
+  @track totalPage = 0;
   objEdit = {};
-  gradeOptions =[]
   isConfirmModalOpen = false;
   idDelete;
+  @track ids = [];
+  isConfirmModalOpenDeleteMany = false;
   pageNumber = 1;
-  pageSize = 2;
-  totalPages = 3;
- 
+  pageSize = 10;
+  objSearch = {};
+  isLoaded = false;
+
   connectedCallback() {
-    // this.getStudentsList();
     this.getGradesList();
-    this.getStudentsListPagination(this.pageSize, (this.pageNumber - 1) * this.pageSize);
+    this.getStudentsListPagination({
+      pageSize: this.pageSize,
+      pageNumber: (this.pageNumber - 1) * this.pageSize
+    });
+  }
+
+  toggle() {
+    this.isLoaded = !this.isLoaded;
   }
 
   handleSearch(event) {
-     getSearchedData({ name: event.detail.name, grade: event.detail.grade, fromDate: event.detail.fromDate, toDate: event.detail.toDate}).then((result) => {
-      if(result.length === 0) { 
-        this.lstStudent = [];
-        return;
-      }
-      this.lstStudent = result;
-    }).catch((err) => {
-      console.log('err', err);
+    this.objSearch = { ...event.detail };
+    console.log("L-objsearch", this.objSearch);
+    this.getStudentsListPagination({
+      pageSize: this.pageSize,
+      pageNumber: (this.pageNumber - 1) * this.pageSize
     });
-  //  this.lstStudent = 
-  }
-    
-  changePageNumber(event) {
-    console.log("L-event", event.detail);
-    this.pageNumber = event.detail;
-    this.getStudentsListPagination(this.pageSize, (this.pageNumber - 1) * this.pageSize);
   }
 
+  changePageNumber(event) {
+    this.pageNumber = event.detail;
+    this.getStudentsListPagination({
+      pageSize: this.pageSize,
+      pageNumber: (this.pageNumber - 1) * this.pageSize
+    });
+  }
   async getGradesList() {
     await getGrades()
       .then((result) => {
@@ -112,31 +118,40 @@ export default class StudentList extends LightningElement {
       });
   }
 
-  // async getStudentsList() {
-  //   await getStudents()
-  //     .then((result) => {
-  //       this.lstStudent = result;
-  //       return result;
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }
-  async getStudentsListPagination(pageSize, pageNumber) {
-    await getStudentsPagination({ pageSize, pageNumber })
+  async getStudentsList() {
+    this.getStudentsListPagination({
+      pageSize: this.pageSize,
+      pageNumber: (this.pageNumber - 1) * this.pageSize
+    });
+  }
+
+  async getStudentsListPagination({ pageSize, pageNumber }) {
+    this.isLoaded = true;
+    await getStudentsPagination({
+      pageSize: pageSize,
+      pageNumber: pageNumber,
+      name: this.objSearch.name,
+      grade: this.objSearch.grade,
+      fromDate: this.objSearch.fromDate,
+      toDate: this.objSearch.toDate
+    })
       .then((result) => {
-        this.lstStudent = result;
-        return result;
+        console.log("L-listPagination", result);
+        this.lstStudent = result.students;
+        this.totalPage = result.totalPage;
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        this.isLoaded = false;
       });
   }
 
   handleOpenModal(event) {
     this.isModalOpen = event.detail.isOpenModal;
   }
-  
+
   handleCloseModal() {
     this.isModalOpen = false;
   }
@@ -148,36 +163,67 @@ export default class StudentList extends LightningElement {
   handleCloseModalCustom() {
     this.isModalOpenCustom = false;
     this.objEdit = {};
-    console.log("L-closeModalCustom", this.objEdit);
   }
 
   handleEditStudent(event) {
     this.isModalOpenCustom = true;
-    console.log('L-handleEditStudent', {... event.detail});
-    this.objEdit = {... event.detail} ;
-  } 
+    this.objEdit = { ...event.detail };
+  }
 
   handleCancel() {
     this.isConfirmModalOpen = false; // Đóng modal khi nhấn Hủy
+  }
+  handleCancelDeleteMany() {
+    this.isConfirmModalOpenDeleteMany = false; // Đóng modal khi nhấn Hủy
   }
 
   handleConfirm() {
     this.isConfirmModalOpen = false; // Đóng modal
     // Thực hiện logic xóa
-    deleteStudent({Id: this.idDelete}).then((result) => {
-      console.log('result', result);
-      this.handleDeleteSuccess();
-      this.getStudentsList();
-      }).catch((err) => {
-      console.log(err)
-    })
-    console.log('Record has been deleted!');
-}
+    deleteStudent({ Id: this.idDelete })
+      .then((result) => {
+        console.log("L-delete", result);
+        this.handleDeleteSuccess();
+        // this.getStudentsList();
+        this.getStudentsListPagination({
+          pageSize: this.pageSize,
+          pageNumber: (this.pageNumber - 1) * this.pageSize
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    console.log("Record has been deleted!");
+  }
 
   handleDeleteStudent(event) {
     this.isConfirmModalOpen = true; //Mở modal khi bấm delete
     this.idDelete = event.detail;
-     
+  }
+
+  changeIds(event) {
+    this.ids = [...event.detail]; //["A", "B"] => ['A', 'B']
+  }
+
+  //confirm xác nhân xóa nhiều record
+  handleConfirmDeleteMany() {
+    deleteStudentByIds({ ids: this.ids })
+      .then((result) => {
+        console.log("L-deletemay", result);
+        this.handleDeleteSuccess();
+        this.getStudentsListPagination({
+          pageSize: this.pageSize,
+          pageNumber: (this.pageNumber - 1) * this.pageSize
+        });
+        this.isConfirmModalOpenDeleteMany = false; // Đóng modal
+      })
+      .catch((err) => {
+        console.log("errr", err);
+      });
+  }
+
+  handleDeleteManyRecord() {
+    this.isConfirmModalOpenDeleteMany = true;
   }
 
   handleDeleteSuccess() {

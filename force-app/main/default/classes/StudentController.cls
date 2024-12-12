@@ -20,10 +20,57 @@ public with sharing class StudentController {
     ];
   }
 
+  public class PaginationStudent {
+    @AuraEnabled
+    public Integer totalRecords {get; set;}
+
+    @AuraEnabled
+    public Integer totalPage {get; set;}
+
+    @AuraEnabled
+    public List<Student__c> students {get; set;}
+    
+    public PaginationStudent(Integer totalRecords, List<Student__c> students, Integer totalPage) {
+      this.totalRecords = totalRecords;
+      this.students = students;
+      this.totalPage = totalPage;
+    }
+  }
+
   @AuraEnabled
-  public static List<Student__c> getStudentsPagination(Integer pageSize, Integer pageNumber) {
-    return [
-      SELECT
+  public static PaginationStudent getStudentsPagination(
+    Integer pageSize, 
+    Integer pageNumber,  
+    String name,
+    String grade,
+    String fromDate,
+    String toDate) 
+    {
+    List<String> conditions = new List<String>();
+
+    if (String.isNotBlank(name)) {
+      conditions.add(
+        'Name LIKE \'%' + String.escapeSingleQuotes(name) + '%\''
+      );
+    }
+    if (String.isNotBlank(grade)) {
+      conditions.add(
+        'grade__c = \'' + String.escapeSingleQuotes(grade) + '\''
+      );
+    }
+    if (String.isNotBlank(fromDate)) {
+      conditions.add('birthday__c >= ' + fromDate);
+    }
+    if (String.isNotBlank(toDate)) {
+      conditions.add('birthday__c <= ' + toDate);
+    }
+    System.debug('conditions: ' + conditions);
+
+    if (conditions.isEmpty()) {
+      System.debug('conditions-chuasearch ' + conditions);
+      Integer totalRecords = [SELECT COUNT() FROM Student__c];
+      List<Student__c> lst = [
+        SELECT
         Id,
         code__c,
         Name,
@@ -38,9 +85,21 @@ public with sharing class StudentController {
         birthday__c,
         grade__c
       FROM Student__c
-      LIMIT :pageSize
-      OFFSET :pageNumber
-    ];
+      LIMIT :pageSize OFFSET :pageNumber
+      ];
+      Integer totalPage = (Integer) Math.ceil( (Decimal) totalRecords / pageSize);
+      return new PaginationStudent(totalRecords, lst, totalPage);
+    }
+    String baseQuery = 'SELECT Id, code__c, Name, firstName__c, lastName__c, status__c, diem1__c, diem2__c, diem3__c, birthday__c FROM Student__c WHERE ';
+    String querySearch = baseQuery + String.join(conditions, ' OR ');
+    List<Student__c> listSearch = Database.query(querySearch);
+    Integer totalRecords = listSearch.size();
+
+    String finalQuery = querySearch + ' LIMIT ' + pageSize + ' OFFSET ' + pageNumber;
+    List<Student__c> lst = Database.query(finalQuery);
+  
+    Integer totalPage = (Integer) Math.ceil( (Decimal) totalRecords / pageSize);
+    return new PaginationStudent(totalRecords, lst, totalPage);
   }
 
   @AuraEnabled
@@ -125,42 +184,6 @@ public with sharing class StudentController {
       insert student;
       System.debug('data inserted: ' + student.Id);
       return student.Id;
-    // try {
-    //   Grade__c gradeRecord = [
-    //     SELECT Id
-    //     FROM Grade__c
-    //     WHERE Id = :grade
-    //     LIMIT 1
-    //   ];
-    //   System.debug('gradeRecord: ' + gradeRecord);
-    //   Student__c student = new Student__c(
-    //     name = name,
-    //     firstName__c = firstName,
-    //     lastName__c = lastName,
-    //     birthday__c = birthday,
-    //     diem1__c = diem1,
-    //     diem2__c = diem2,
-    //     diem3__c = diem2,
-    //     gender__c = gender,
-    //     grade__c = gradeRecord.Id
-    //   );
-
-    //   insert student;
-    //   System.debug('data inserted: ' + student.Id);
-    //   return student.Id;
-    // } catch (PositionException e) {
-    //   System.debug('variable: ' + e);
-    //   throw new AuraHandledException(e.getMessage());
-    //   // Ghi log lỗi và ném Exception để xử lý ở frontend
-    //   // throw new PositionException('Position record could not be inserted.', e);
-    //   // System.debug('Error: ' + e.getMessage());
-    //   // throw new AuraHandledException(e.getMessage());
-    // }
-    //  catch (Exception e) {
-    //   System.debug('variable2: ' + e);
-    //   return e.getMessage();
-    //   // throw new AuraHandledException('Có lỗi xảy ra: ' + e.getMessage());
-    // }
   }
 
   @AuraEnabled
@@ -183,7 +206,7 @@ public with sharing class StudentController {
       student.birthday__c = birthday;
       student.diem1__c = diem1;
       student.diem2__c = diem2;
-      student.diem3__c = diem2;
+      student.diem3__c = diem3;
       student.gender__c = gender;
       student.grade__c = grade;
 
@@ -200,47 +223,11 @@ public with sharing class StudentController {
   }
 
   @AuraEnabled
-  public static List<Student__c> getSearchedData(
-    String name,
-    String grade,
-    String fromDate,
-    String toDate
-  ) {
-    try {
-      String baseQuery = 'SELECT Id, code__c, Name, firstName__c, lastName__c, status__c, diem1__c, diem2__c, diem3__c, birthday__c FROM Student__c WHERE ';
-      List<String> conditions = new List<String>();
-
-      if (String.isNotBlank(name)) {
-        conditions.add(
-          'Name LIKE \'%' + String.escapeSingleQuotes(name) + '%\''
-        );
-      }
-      if (String.isNotBlank(grade)) {
-        conditions.add(
-          'grade__c = \'' + String.escapeSingleQuotes(grade) + '\''
-        );
-      }
-      if (String.isNotBlank(fromDate)) {
-        conditions.add('birthday__c >= ' + fromDate);
-      }
-      if (String.isNotBlank(toDate)) {
-        conditions.add('birthday__c <= ' + toDate);
-      }
-      System.debug('conditions: ' + conditions);
-
-      if (conditions.isEmpty()) {
-        throw new AuraHandledException('No search criteria provided.');
-      }
-
-      String finalQuery = baseQuery + String.join(conditions, ' OR ');
-      System.debug('Query: ' + finalQuery);
-
-      return Database.query(finalQuery);
-    } catch (Exception e) {
-      throw new AuraHandledException(e.getMessage());
-    }
+  public static string deleteStudentByIds(List<String> ids) {
+    List<Student__c> student = [SELECT Id FROM Student__c WHERE Id IN :ids];
+    delete student;
+    return 'success';
   }
 
-  public class PositionException extends Exception {}
 }
 

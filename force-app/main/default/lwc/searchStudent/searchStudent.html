@@ -48,7 +48,7 @@
                   value={selectedDateTo}
                   disabled={disabledDates}
                   placeholder="Từ ngày"
-                  name="FromDate"
+                  name="fromDate"
                   onchange={handleChange}
                 ></lightning-input>
               </div>
@@ -61,7 +61,7 @@
                   variant="label-hidden"
                   value={selectedDateTo}
                   disabled={disabledDates}
-                  name="ToDate"
+                  name="toDate"
                   placeholder="Đến ngày"
                   onchange={handleChange}
                 ></lightning-input>
@@ -127,7 +127,7 @@
             variant="destructive"
             label="Xóa"
             title="Destructive action"
-            onclick={handleClick}
+            onclick={openModalDeleteManyRecord}
             class="slds-m-left_x-small"
           ></lightning-button>
         </div>

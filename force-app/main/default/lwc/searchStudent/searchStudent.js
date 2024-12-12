@@ -9,6 +9,7 @@ export default class SearchStudent extends LightningElement {
   objSearch = {};
   handleClick() {
     // this.disabledDates = !this.disabledDates;
+    console.log("S-objsearch", this.objSearch);  
     const customEvent = new CustomEvent("eventsearch", {
       detail: this.objSearch,
     });
@@ -24,6 +25,8 @@ export default class SearchStudent extends LightningElement {
   // }
 
   handleChange(event) {
+    console.log("S-event", event.target.name);
+    console.log("S-event", event.target.value);
     this.value = event.detail.value;
     const name = event.target.name;
     this.objSearch[name]=event.detail.value;
@@ -40,6 +43,13 @@ export default class SearchStudent extends LightningElement {
     this.dispatchEvent(
       new CustomEvent("openmodalcustom", { 
         detail: { isOpenModalCustom: true }
+     })
+    );
+  }
+  openModalDeleteManyRecord() {
+    this.dispatchEvent(
+      new CustomEvent("openmodaldeletemanyrecord", { 
+        detail: { isOpenModalDeleteManyRecord: true }
      })
     );
   }

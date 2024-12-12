@@ -1,12 +1,49 @@
 <template>
-  <c-search-student oneventsearch={handleSearch} onopenmodal={handleOpenModal} onopenmodalcustom={handleOpenModalCustom} grade-options={gradeOptions}></c-search-student>
-  <c-table-student column={columns} student={lstStudent} oneditstudent={handleEditStudent} ondeletestudent={handleDeleteStudent}></c-table-student>
-  <c-pagination-component records={lstStudent} page-number={pageNumber} page-size={pageSize total-pages={totalPages} onchangepagenumber={changePageNumber}></c-pagination-component>
-  <c-add-student-modal is-modal-open={isModalOpen} onclosemodal={handleCloseModal}></c-add-student-modal>
-  <c-add-Student is-modal-open={isModalOpenCustom} onclosemodal={handleCloseModalCustom} obj-edit={objEdit} onrefreshdata={getStudentsList}></c-add-Student>
-  <c-delete-confirmation
+  <div class="slds-m-around_large">
+    <div class="slds-is-relative">
+      <lightning-spinner if:true={isLoaded} alternative-text="Loading...">
+      </lightning-spinner>
+      <c-search-student
+        oneventsearch={handleSearch}
+        onopenmodal={handleOpenModal}
+        onopenmodalcustom={handleOpenModalCustom}
+        grade-options={gradeOptions}
+        onopenmodaldeletemanyrecord={handleDeleteManyRecord}
+      ></c-search-student>
+      <c-table-student
+        column={columns}
+        student={lstStudent}
+        oneditstudent={handleEditStudent}
+        ondeletestudent={handleDeleteStudent}
+        onids={changeIds}
+      ></c-table-student>
+      <c-pagination-component
+        records={lstStudent}
+        page-number={pageNumber}
+        page-size={pageSize}
+        total-page={totalPage}
+        onchangepagenumber={changePageNumber}
+      ></c-pagination-component>
+      <c-add-student-modal
+        is-modal-open={isModalOpen}
+        onclosemodal={handleCloseModal}
+      ></c-add-student-modal>
+      <c-add-Student
+        is-modal-open={isModalOpenCustom}
+        onclosemodal={handleCloseModalCustom}
+        obj-edit={objEdit}
+        onrefreshdata={getStudentsList}
+      ></c-add-Student>
+      <c-delete-confirmation
         is-modal-open={isConfirmModalOpen}
         oncancel={handleCancel}
         onconfirm={handleConfirm}
-  ></c-delete-confirmation>
+      ></c-delete-confirmation>
+      <c-delete-confirmation
+        is-modal-open={isConfirmModalOpenDeleteMany}
+        oncancel={handleCancelDeleteMany}
+        onconfirm={handleConfirmDeleteMany}
+      ></c-delete-confirmation>
+    </div>
+  </div>
 </template>
