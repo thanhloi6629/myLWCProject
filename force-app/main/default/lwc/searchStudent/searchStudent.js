@@ -23,6 +23,13 @@ export default class SearchStudent extends LightningElement {
   //     { label: "Finished", value: "finished" }
   //   ];
   // }
+  handleSortByName(event) {  
+    this.dispatchEvent(
+      new CustomEvent("eventsort", {
+        detail: { checked: event.target.checked }
+      })
+    );
+  }
 
   handleChange(event) {
     console.log("S-event", event.target.name);

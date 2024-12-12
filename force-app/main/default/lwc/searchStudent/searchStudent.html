@@ -9,7 +9,7 @@
           </div>
           <div class="slds-col slds-size_9-of-12">
             <lightning-input
-              name="name"
+              name="lastName__c"
               variant="label-hidden"
               placeholder="Tên"
               onchange={handleChange}
@@ -75,12 +75,12 @@
         <div class="slds-checkbox">
           <input
             type="checkbox"
-            name="options"
-            id="checkbox-unique-id-81"
-            value="checkbox-unique-id-81"
+            name="sortByName"
+            id="sortByName"
+            onchange={handleSortByName}
             checked=""
           />
-          <label class="slds-checkbox__label" for="checkbox-unique-id-81">
+          <label class="slds-checkbox__label" for="sortByName">
             <span class="slds-checkbox_faux"></span>
             <span class="slds-form-element__label slds-m-left_x-small"
               >Sắp xếp tăng dần theo tên</span

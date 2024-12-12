@@ -47,8 +47,8 @@ const students = [
 ];
 const columns = [
   { label: "Mã", fieldName: "code__c" },
-  { label: "Hõ và Tên", fieldName: "Name" },
-  { label: "Hõ", fieldName: "firstName__c" },
+  { label: "Họ và Tên", fieldName: "Name" },
+  { label: "Họ", fieldName: "firstName__c" },
   { label: "Tên", fieldName: "lastName__c" },
   { label: "Ngày Sinh", fieldName: "date__c" },
   { label: "Giới Tính", fieldName: "gender__C" },
@@ -74,6 +74,7 @@ export default class StudentList extends LightningElement {
   pageSize = 10;
   objSearch = {};
   isLoaded = false;
+  sortOrder = "ASC";
 
   connectedCallback() {
     this.getGradesList();
@@ -94,6 +95,16 @@ export default class StudentList extends LightningElement {
       pageSize: this.pageSize,
       pageNumber: (this.pageNumber - 1) * this.pageSize
     });
+  }
+
+  handleSortName(event) {
+    console.log("L-handleSortName", event.detail);
+    if(event.detail.checked) {
+      this.sortOrder = "ASC";
+    } else {
+      this.sortOrder = "DESC";
+    }
+    this.getStudentsList();
   }
 
   changePageNumber(event) {
@@ -127,13 +138,16 @@ export default class StudentList extends LightningElement {
 
   async getStudentsListPagination({ pageSize, pageNumber }) {
     this.isLoaded = true;
+    console.log("S-this.sortOrder", this.sortOrder);
     await getStudentsPagination({
       pageSize: pageSize,
       pageNumber: pageNumber,
-      name: this.objSearch.name,
+      name: this.objSearch.lastName__c,
       grade: this.objSearch.grade,
       fromDate: this.objSearch.fromDate,
-      toDate: this.objSearch.toDate
+      toDate: this.objSearch.toDate,
+      sortField: 'lastName__c',
+      sortOrder:  this.sortOrder
     })
       .then((result) => {
         console.log("L-listPagination", result);

@@ -88,7 +88,8 @@ export default class AddStudent extends LightningElement {
           console.log("result", result);
           this.handleEditSuccess();
           this.closeModal();
-          // this.dispatchEvent(new CustomEvent("refreshdata"));
+          // Gọi callback từ cha để refresh dữ liệu
+          this.dispatchEvent(new CustomEvent("refreshdata"));
         })
         .catch((error) => {
           this.handleError(error);

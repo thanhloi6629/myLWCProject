@@ -44,13 +44,16 @@ public with sharing class StudentController {
     String name,
     String grade,
     String fromDate,
-    String toDate) 
+    String toDate,
+    String sortField, 
+    String sortOrder
+    ) 
     {
     List<String> conditions = new List<String>();
 
     if (String.isNotBlank(name)) {
       conditions.add(
-        'Name LIKE \'%' + String.escapeSingleQuotes(name) + '%\''
+        'lastName__c LIKE \'%' + String.escapeSingleQuotes(name) + '%\''
       );
     }
     if (String.isNotBlank(grade)) {
@@ -66,37 +69,22 @@ public with sharing class StudentController {
     }
     System.debug('conditions: ' + conditions);
 
-    if (conditions.isEmpty()) {
-      System.debug('conditions-chuasearch ' + conditions);
-      Integer totalRecords = [SELECT COUNT() FROM Student__c];
-      List<Student__c> lst = [
-        SELECT
-        Id,
-        code__c,
-        Name,
-        firstName__c,
-        lastName__c,
-        status__c,
-        diem1__c,
-        diem2__c,
-        diem3__c,
-        diemTB__c,
-        gender__c,
-        birthday__c,
-        grade__c
-      FROM Student__c
-      LIMIT :pageSize OFFSET :pageNumber
-      ];
-      Integer totalPage = (Integer) Math.ceil( (Decimal) totalRecords / pageSize);
-      return new PaginationStudent(totalRecords, lst, totalPage);
-    }
-    String baseQuery = 'SELECT Id, code__c, Name, firstName__c, lastName__c, status__c, diem1__c, diem2__c, diem3__c, birthday__c FROM Student__c WHERE ';
-    String querySearch = baseQuery + String.join(conditions, ' OR ');
-    List<Student__c> listSearch = Database.query(querySearch);
-    Integer totalRecords = listSearch.size();
+    String baseQuery = 'SELECT Id, code__c, Name, firstName__c, lastName__c, status__c, diem1__c, diem2__c, diem3__c, birthday__c FROM Student__c';
 
-    String finalQuery = querySearch + ' LIMIT ' + pageSize + ' OFFSET ' + pageNumber;
-    List<Student__c> lst = Database.query(finalQuery);
+    if (!conditions.isEmpty()) {
+      baseQuery = baseQuery + ' WHERE ' +  String.join(conditions, ' OR ');
+    }
+
+    List<Student__c> result = Database.query(baseQuery);
+    Integer totalRecords = result.size();
+   
+    if (String.isNotBlank(sortField) && String.isNotBlank(sortOrder)) {
+      baseQuery = baseQuery + ' ORDER BY ' + sortField + ' ' + sortOrder;
+    } 
+    baseQuery = baseQuery + ' LIMIT ' + pageSize + ' OFFSET ' + pageNumber;
+
+    System.debug('baseQuery: ' + baseQuery);
+    List<Student__c> lst = Database.query(baseQuery);
   
     Integer totalPage = (Integer) Math.ceil( (Decimal) totalRecords / pageSize);
     return new PaginationStudent(totalRecords, lst, totalPage);
