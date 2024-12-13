@@ -69,7 +69,7 @@ public with sharing class StudentController {
     }
     System.debug('conditions: ' + conditions);
 
-    String baseQuery = 'SELECT Id, code__c, Name, firstName__c, lastName__c, status__c, diem1__c, diem2__c, diem3__c, birthday__c FROM Student__c';
+    String baseQuery = 'SELECT Id, code__c, Name, firstName__c, lastName__c, status__c, diem1__c, diem2__c, diem3__c, birthday__c, gender__c, grade__c FROM Student__c';
 
     if (!conditions.isEmpty()) {
       baseQuery = baseQuery + ' WHERE ' +  String.join(conditions, ' OR ');
@@ -98,45 +98,45 @@ public with sharing class StudentController {
     ];
   }
 
-  @AuraEnabled
-  public static String addStudentV2(Map<String, Object> studentData) {
-    System.debug('fields: ' + studentData);
-    try {
-      String grade = (String) studentData.get('grade');
-      Grade__c gradeRecord = [
-        SELECT Id
-        FROM Grade__c
-        WHERE code__c = :grade
-        LIMIT 1
-      ];
+  // @AuraEnabled
+  // public static String addStudentV2(Map<String, Object> studentData) {
+  //   System.debug('fields: ' + studentData);
+  //   try {
+  //     String grade = (String) studentData.get('grade');
+  //     Grade__c gradeRecord = [
+  //       SELECT Id
+  //       FROM Grade__c
+  //       WHERE code__c = :grade
+  //       LIMIT 1
+  //     ];
 
-      Student__c student = new Student__c(
-        Name = (String) studentData.get('Name'),
-        firstName__c = (String) studentData.get('firstName__c'),
-        lastName__c = (String) studentData.get('lastName__c'),
-        birthday__c = studentData.containsKey('birthday__c')
-          ? (Date) studentData.get('birthday__c')
-          : null,
-        diem1__c = studentData.containsKey('diem1__c')
-          ? (Decimal) studentData.get('diem1__c')
-          : null,
-        diem2__c = studentData.containsKey('diem2__c')
-          ? (Decimal) studentData.get('diem2__c')
-          : null,
-        diem3__c = studentData.containsKey('die3__c')
-          ? (Decimal) studentData.get('diem3__c')
-          : null,
-        gender__c = (String) studentData.get('gender'),
-        grade__c = gradeRecord.Id
-      );
-      System.debug('student: ' + student);
-      insert student;
-      return student.Id;
-    } catch (Exception e) {
-      System.debug(e.getMessage());
-      return null;
-    }
-  }
+  //     Student__c student = new Student__c(
+  //       Name = (String) studentData.get('Name'),
+  //       firstName__c = (String) studentData.get('firstName__c'),
+  //       lastName__c = (String) studentData.get('lastName__c'),
+  //       birthday__c = studentData.containsKey('birthday__c')
+  //         ? (Date) studentData.get('birthday__c')
+  //         : null,
+  //       diem1__c = studentData.containsKey('diem1__c')
+  //         ? (Decimal) studentData.get('diem1__c')
+  //         : null,
+  //       diem2__c = studentData.containsKey('diem2__c')
+  //         ? (Decimal) studentData.get('diem2__c')
+  //         : null,
+  //       diem3__c = studentData.containsKey('die3__c')
+  //         ? (Decimal) studentData.get('diem3__c')
+  //         : null,
+  //       gender__c = (String) studentData.get('gender'),
+  //       grade__c = gradeRecord.Id
+  //     );
+  //     System.debug('student: ' + student);
+  //     insert student;
+  //     return student.Id;
+  //   } catch (Exception e) {
+  //     System.debug(e.getMessage());
+  //     return null;
+  //   }
+  // }
 
   @AuraEnabled
   public static String addStudent(
