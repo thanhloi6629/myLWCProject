@@ -1,24 +1,4 @@
 public with sharing class StudentController {
-  @AuraEnabled
-  public static List<Student__c> getStudents() {
-    return [
-      SELECT
-        Id,
-        code__c,
-        Name,
-        firstName__c,
-        lastName__c,
-        status__c,
-        diem1__c,
-        diem2__c,
-        diem3__c,
-        diemTB__c,
-        gender__c,
-        birthday__c,
-        grade__c
-      FROM Student__c
-    ];
-  }
 
   public class PaginationStudent {
     @AuraEnabled
@@ -150,13 +130,13 @@ public with sharing class StudentController {
     String gender,
     String grade
   ) {
-    Grade__c gradeRecord = [
-        SELECT Id
-        FROM Grade__c
-        WHERE Id = :grade
-        LIMIT 1
-      ];
-      System.debug('gradeRecord: ' + gradeRecord);
+    // Grade__c gradeRecord = [
+    //     SELECT Id
+    //     FROM Grade__c
+    //     WHERE Id = :grade
+    //     LIMIT 1
+    //   ];
+      // System.debug('gradeRecord: ' + gradeRecord);
       Student__c student = new Student__c(
         name = name,
         firstName__c = firstName,
@@ -164,9 +144,9 @@ public with sharing class StudentController {
         birthday__c = birthday,
         diem1__c = diem1,
         diem2__c = diem2,
-        diem3__c = diem2,
+        diem3__c = diem3,
         gender__c = gender,
-        grade__c = gradeRecord.Id
+        grade__c = grade
       );
 
       insert student;
@@ -207,14 +187,14 @@ public with sharing class StudentController {
   public static string deleteStudent(String Id) {
     Student__c student = [SELECT Id FROM Student__c WHERE Id = :Id LIMIT 1];
     delete student;
-    return 'success';
+    return student.Id;
   }
 
   @AuraEnabled
-  public static string deleteStudentByIds(List<String> ids) {
+  public static List<String> deleteStudentByIds(List<String> ids) {
     List<Student__c> student = [SELECT Id FROM Student__c WHERE Id IN :ids];
     delete student;
-    return 'success';
+    return ids;
   }
 
 }
