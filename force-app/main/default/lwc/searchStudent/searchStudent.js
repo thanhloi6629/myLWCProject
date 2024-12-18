@@ -2,11 +2,9 @@ import { LightningElement, api } from "lwc";
 
 export default class SearchStudent extends LightningElement {
   @api gradeOptions;
-  value = "inProgress";
-  selectedDateFrom;
-  selectedDateTo;
   disabledDates = false;
   objSearch = {};
+  @api isDisableDelete
 
   handleClick() {
     const customEvent = new CustomEvent("eventsearch", {

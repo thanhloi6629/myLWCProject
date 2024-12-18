@@ -67,6 +67,7 @@ export default class StudentList extends LightningElement {
   objEdit = {};
   isConfirmModalOpen = false;
   idDelete;
+  isDisableDelete = true;
   isConfirmModalOpenDeleteMany = false;
   pageNumber = 1;
   pageSize = 10;
@@ -217,6 +218,11 @@ export default class StudentList extends LightningElement {
 
   changeIds(event) {
     this.ids = [...event.detail]; //["A", "B"] => ['A', 'B']
+    if(event.detail.length > 0) {
+      this.isDisableDelete = false;
+    } else {
+      this.isDisableDelete = true;
+    }
   }
 
   //confirm xác nhân xóa nhiều record
