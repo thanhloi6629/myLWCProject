@@ -50,7 +50,7 @@ private class StudentControllerTest {
     insert students;
   }
 
-  // 4% test case getGrades
+  // 3% test case getGrades
   @IsTest 
   static void testGrades() {
     Test.startTest();
@@ -58,7 +58,7 @@ private class StudentControllerTest {
     Test.stopTest();
     System.assertEquals(10, grades.size());
   }
-
+ // 45%
   @IsTest
   static void testGetStudentsPagination() {
     List<Student__c> student = [SELECT Id, Name FROM Student__c];

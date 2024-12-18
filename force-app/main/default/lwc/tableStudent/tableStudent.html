@@ -11,23 +11,22 @@
           scope="col"
           style="width: 3.25rem"
         >
-        <div class="slds-th__action slds-th__action_form">
-          <div class="slds-checkbox">
-            <input
-              type="checkbox"
-              name="selectAll"
-              id="selectAll"
-              onchange={handleSelectAll}
-            />
-            <label
-              class="slds-checkbox__label"
-              for="selectAll"
-            >
-              <span class="slds-checkbox_faux"></span>
-              <span class="slds-form-element__label slds-assistive-text">Select All</span>
-            </label>
+          <div class="slds-th__action slds-th__action_form">
+            <div class="slds-checkbox">
+              <input
+                type="checkbox"
+                name="selectAll"
+                id="selectAll"
+                onchange={handleSelectAll}
+              />
+              <label class="slds-checkbox__label" for="selectAll">
+                <span class="slds-checkbox_faux"></span>
+                <span class="slds-form-element__label slds-assistive-text"
+                  >Select All</span
+                >
+              </label>
+            </div>
           </div>
-        </div>
         </th>
         <template for:each={column} for:item="student">
           <th key={student.fieldName} class="m-1">
@@ -54,8 +53,11 @@
           aria-selected="false"
           key={column.code__c}
           class="slds-line-height_reset"
+        >
+          <td
+            class="slds-text-align_center slds-cell_action-mode"
+            role="gridcell"
           >
-          <td class="slds-text-align_center slds-cell_action-mode" role="gridcell">
             <div class="slds-checkbox">
               <input
                 id={column.Id}
@@ -64,12 +66,11 @@
                 data-id={column.Id}
                 onchange={handleRowSelection}
               />
-              <label
-                class="slds-checkbox__label"
-                for={column.Id}
-              >
+              <label class="slds-checkbox__label" for={column.Id}>
                 <span class="slds-checkbox_faux"></span>
-                <span class="slds-form-element__label slds-assistive-text">Select Item</span>
+                <span class="slds-form-element__label slds-assistive-text"
+                  >Select Item</span
+                >
               </label>
             </div>
           </td>
@@ -137,7 +138,8 @@
                 alternative-text="Sửa"
                 variant="bare"
                 onclick={handleEdit}
-                data-id={column.Id}></lightning-button-icon>
+                data-id={column.Id}
+              ></lightning-button-icon>
             </div>
           </td>
           <td class="m-1">
@@ -148,7 +150,8 @@
                 alternative-text="Xóa"
                 variant="bare"
                 onclick={handleDelete}
-                data-id={column.Id}></lightning-button-icon>
+                data-id={column.Id}
+              ></lightning-button-icon>
             </div>
           </td>
         </tr>

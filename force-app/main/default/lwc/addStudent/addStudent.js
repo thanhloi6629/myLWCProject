@@ -4,8 +4,6 @@ import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import getGrades from "@salesforce/apex/StudentController.getGrades";
 import addStudent from "@salesforce/apex/StudentController.addStudent";
 import editStudent from "@salesforce/apex/StudentController.editStudent";
-// import { handleEditSuccess } from "c/utils/commonUtils";
-// import addStudentV2 from "@salesforce/apex/StudentController.addStudentV2";
 
 export default class AddStudent extends LightningElement {
   @api isModalOpen;
@@ -31,9 +29,6 @@ export default class AddStudent extends LightningElement {
         console.log("error", error);
       });
   }
-  async renderedCallback() {
-    console.log("L-objEdit", JSON.stringify(this.objEdit));
-  }
   // Tạo kiểu pakageList trên salesForce
   get genderOptions() {
     return [
@@ -44,12 +39,11 @@ export default class AddStudent extends LightningElement {
   }
 
   handleSubmit() {
-    if(this.handleEnableValidate()) return;
+    if (this.handleEnableValidate()) return;
     console.log("'L---objEdit", JSON.stringify(this.objEdit));
     console.log("'L---objAdd", JSON.stringify(this.objAdd));
 
     if (!this.objEdit.Id) {
-      console.log('chay vao insert ròi')
       addStudent({
         name: this.objAdd.Name,
         firstName: this.objAdd.firstName__c,
@@ -62,7 +56,7 @@ export default class AddStudent extends LightningElement {
         grade: this.objAdd.grade__c
       })
         .then((result) => {
-          console.log('result',result)
+          console.log("result", result);
           this.handleAddSuccess();
           this.closeModal();
           // Gọi callback từ cha để refresh dữ liệu
@@ -107,9 +101,9 @@ export default class AddStudent extends LightningElement {
     //   });
   }
 
-  handleError(error) { 
-    const errException = error.body.pageErrors[0].message; 
-    if(error.body.pageErrors) {
+  handleError(error) {
+    const errException = error.body.pageErrors[0].message;
+    if (error.body.pageErrors) {
       this.showToast("Error", errException, "error");
       return;
     }
@@ -149,25 +143,13 @@ export default class AddStudent extends LightningElement {
     try {
       const name = event.target.name;
       const value = event.target.value;
-      console.log("L-Change-n-objEdit:", this.objEdit);
-      console.log(
-        "L-Change-n-objEdit -stringyfy:",
-        JSON.stringify(this.objEdit)
-      );
-
-      console.log("L-Change-n-objAdd:", JSON.stringify(this.objAdd));
 
       if (this.objEdit.Id) {
-        // this.objEdit = { ...this.objEdit};
         const obj = { ...this.objEdit, [name]: value };
         this.objEdit = obj;
-        console.log("L-objEdit update:", JSON.stringify(this.objEdit));
       } else {
-        console.log("L-Change-objAdd:", JSON.stringify(this.objAdd));
         this.objAdd[name] = value;
       }
-
-      // this.objEdit[name] = event.target.value;
     } catch (error) {
       console.log(error);
     }
@@ -178,20 +160,21 @@ export default class AddStudent extends LightningElement {
     const inputs = this.template.querySelectorAll(
       "lightning-input, lightning-combobox"
     );
-    // const inputField = this.template.querySelector('[data-id="studentName"]'); sử dụng data-id="studentName" 
     inputs.forEach((input) => {
       // Hiển thị thông báo lỗi nếu không hợp lệ
-      console.log("input-validate", input);
-
-      if (input.dataset.id === "diem1__c" || input.dataset.id === "diem2__c" || input.dataset.id === "diem3__c") { 
+      if (
+        input.dataset.id === "diem1__c" ||
+        input.dataset.id === "diem2__c" ||
+        input.dataset.id === "diem3__c"
+      ) {
         const diem = parseInt(input.value, 10);
 
-        if (isNaN(diem) || diem > 10 ) {
-            input.setCustomValidity('DIEM PHAI NHO HON 10'); //hiển thị được trực tiếp dười input
+        if (isNaN(diem) || diem > 10) {
+          input.setCustomValidity("Điểm phải nhỏ hơn 10"); //hiển thị được trực tiếp dười input
         } else {
-            input.setCustomValidity(''); // Không có lỗi
+          input.setCustomValidity(""); // Không có lỗi
         }
-    }
+      }
 
       if (!input.checkValidity()) {
         // Hiển thị lỗi tùy chỉnh bằng setCustomValidity.
@@ -203,7 +186,7 @@ export default class AddStudent extends LightningElement {
     if (!valid) {
       console.log("Form không hợp lệ");
       return true;
-    } 
+    }
     console.log("Form hợp lệ");
     return false;
   }

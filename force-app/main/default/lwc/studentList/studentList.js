@@ -1,6 +1,4 @@
 import { LightningElement, track } from "lwc";
-// import getAccounts from'@salesforce/apex/AccountController.getAccounts';
-// import getStudents from "@salesforce/apex/StudentController.getStudents";
 import deleteStudent from "@salesforce/apex/StudentController.deleteStudent";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import getGrades from "@salesforce/apex/StudentController.getGrades";
@@ -65,10 +63,10 @@ export default class StudentList extends LightningElement {
   @track isModalOpen = false;
   @track isModalOpenCustom = false;
   @track totalPage = 0;
+  @track ids = [];
   objEdit = {};
   isConfirmModalOpen = false;
   idDelete;
-  @track ids = [];
   isConfirmModalOpenDeleteMany = false;
   pageNumber = 1;
   pageSize = 10;
@@ -99,7 +97,7 @@ export default class StudentList extends LightningElement {
 
   handleSortName(event) {
     console.log("L-handleSortName", event.detail);
-    if(event.detail.checked) {
+    if (event.detail.checked) {
       this.sortOrder = "ASC";
     } else {
       this.sortOrder = "DESC";
@@ -139,6 +137,8 @@ export default class StudentList extends LightningElement {
   async getStudentsListPagination({ pageSize, pageNumber }) {
     this.isLoaded = true;
     console.log("S-this.sortOrder", this.sortOrder);
+    console.log("S-this.objSearch", this.objSearch);
+
     await getStudentsPagination({
       pageSize: pageSize,
       pageNumber: pageNumber,
@@ -146,8 +146,8 @@ export default class StudentList extends LightningElement {
       grade: this.objSearch.grade,
       fromDate: this.objSearch.fromDate,
       toDate: this.objSearch.toDate,
-      sortField: 'lastName__c',
-      sortOrder:  this.sortOrder
+      sortField: "lastName__c",
+      sortOrder: this.sortOrder
     })
       .then((result) => {
         console.log("L-listPagination", result);

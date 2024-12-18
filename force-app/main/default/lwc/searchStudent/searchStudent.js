@@ -1,4 +1,4 @@
-import { LightningElement, api} from "lwc";
+import { LightningElement, api } from "lwc";
 
 export default class SearchStudent extends LightningElement {
   @api gradeOptions;
@@ -7,23 +7,15 @@ export default class SearchStudent extends LightningElement {
   selectedDateTo;
   disabledDates = false;
   objSearch = {};
-  handleClick() {
-    // this.disabledDates = !this.disabledDates;
-    console.log("S-objsearch", this.objSearch);  
-    const customEvent = new CustomEvent("eventsearch", {
-      detail: this.objSearch,
-    });
 
+  handleClick() {
+    const customEvent = new CustomEvent("eventsearch", {
+      detail: this.objSearch
+    });
     this.dispatchEvent(customEvent);
   }
-  // get options() {
-  //   return [
-  //     { label: "New", value: "new" },
-  //     { label: "In Progress", value: "inProgress" },
-  //     { label: "Finished", value: "finished" }
-  //   ];
-  // }
-  handleSortByName(event) {  
+
+  handleSortByName(event) {
     this.dispatchEvent(
       new CustomEvent("eventsort", {
         detail: { checked: event.target.checked }
@@ -32,32 +24,30 @@ export default class SearchStudent extends LightningElement {
   }
 
   handleChange(event) {
-    console.log("S-event", event.target.name);
-    console.log("S-event", event.target.value);
-    this.value = event.detail.value;
+    const value = event.detail.value
     const name = event.target.name;
-    this.objSearch[name]=event.detail.value;
+    this.objSearch[name] = value;
   }
 
   openModal() {
     this.dispatchEvent(
-      new CustomEvent("openmodal", { 
+      new CustomEvent("openmodal", {
         detail: { isOpenModal: true }
-     })
+      })
     );
   }
   openModalCustom() {
     this.dispatchEvent(
-      new CustomEvent("openmodalcustom", { 
+      new CustomEvent("openmodalcustom", {
         detail: { isOpenModalCustom: true }
-     })
+      })
     );
   }
   openModalDeleteManyRecord() {
     this.dispatchEvent(
-      new CustomEvent("openmodaldeletemanyrecord", { 
+      new CustomEvent("openmodaldeletemanyrecord", {
         detail: { isOpenModalDeleteManyRecord: true }
-     })
+      })
     );
   }
 }

@@ -26,13 +26,9 @@
           <h2
             id="modal-heading-01"
             class="slds-text-heading_medium slds-hyphenate"
-          > 
-          <template if:true={objEdit.Id}>
-            Sửa Học Sinh
-          </template>
-          <template if:false={objEdit.Id}>
-            Thêm Mới Học Sinh
-          </template>
+          >
+            <template if:true={objEdit.Id}> Sửa Học Sinh </template>
+            <template if:false={objEdit.Id}> Thêm Mới Học Sinh </template>
           </h2>
         </header>
         <div
@@ -63,7 +59,7 @@
               </div>
             </div>
             <!-- row 1 -->
-            <div class="slds-grid slds-wrap slds-p-top_x-small ">
+            <div class="slds-grid slds-wrap slds-p-top_x-small">
               <div class="slds-col slds-size_2-of-12 slds-text-align_left">
                 <label class="slds-form-element__label" for="firstName"
                   >Họ:</label
@@ -77,7 +73,7 @@
                   placeholder="First name"
                   data-id="firstName"
                   name="firstName__c"
-                   value={objEdit.firstName__c}
+                  value={objEdit.firstName__c}
                   message-when-value-missing="Không nhập ăn đấm nha"
                   onchange={handleChange}
                 >
@@ -126,8 +122,8 @@
                 ></lightning-combobox>
               </div>
             </div>
-             <!-- row 4-->
-             <div class="slds-grid slds-wrap slds-p-top_x-small">
+            <!-- row 4-->
+            <div class="slds-grid slds-wrap slds-p-top_x-small">
               <div class="slds-col slds-size_2-of-12 slds-text-align_left">
                 <label class="slds-form-element__label" for="firstName"
                   >Ngày Sinh:</label
@@ -148,8 +144,8 @@
                 ></lightning-input>
               </div>
             </div>
-             <!-- row 5-->
-             <div class="slds-grid slds-wrap slds-p-top_x-small">
+            <!-- row 5-->
+            <div class="slds-grid slds-wrap slds-p-top_x-small">
               <div class="slds-col slds-size_2-of-12 slds-text-align_left">
                 <label class="slds-form-element__label" for="firstName"
                   >Điểm Toán:</label
@@ -166,17 +162,19 @@
                   onchange={handleChange}>
                 </c-common-input> -->
                 <lightning-input
-                  label="Điểm toán" 
+                  label="Điểm toán"
                   variant="label-hidden"
-                  name="diem1__c" 
+                  name="diem1__c"
                   data-id="diem1__c"
-                  min="0" 
-                  max="10" 
+                  min="0"
+                  max="10"
                   value={objEdit.diem1__c}
                   message-when-value-missing=" Hãy Nhập điểm toán"
                   required
-                  onchange={handleChange}>
-                ></lightning-input>
+                  onchange={handleChange}
+                >
+                  ></lightning-input
+                >
               </div>
             </div>
             <!-- row 5-->
@@ -200,8 +198,8 @@
                 ></lightning-input>
               </div>
             </div>
-             <!-- row 6-->
-             <div class="slds-grid slds-wrap slds-p-top_x-small">
+            <!-- row 6-->
+            <div class="slds-grid slds-wrap slds-p-top_x-small">
               <div class="slds-col slds-size_2-of-12 slds-text-align_left">
                 <label class="slds-form-element__label" for="firstName"
                   >Điểm Hóa:</label
@@ -221,13 +219,12 @@
                 ></lightning-input>
               </div>
             </div>
-             <!-- row 7-->
-             <div class="slds-grid slds-wrap slds-p-top_x-small">
+            <!-- row 7-->
+            <div class="slds-grid slds-wrap slds-p-top_x-small">
               <div class="slds-col slds-size_2-of-12 slds-text-align_left">
                 <label class="slds-form-element__label" for="firstName"
                   >Lớp:
-                </label
-                >
+                </label>
               </div>
               <div class="slds-col slds-size_9-of-12">
                 <lightning-combobox
@@ -252,10 +249,9 @@
               label="Save"
               onclick={handleSubmit}
             ></lightning-button>
-            </div>
+          </div>
         </div>
       </div>
-      
     </section>
     <div class="slds-backdrop slds-backdrop_open"></div>
   </template>
