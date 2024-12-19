@@ -3,7 +3,17 @@ import { LightningElement, api, track } from "lwc";
 export default class TableStudent extends LightningElement {
   @api student;
   @api column;
+  @api totalRecords;
   @track selectedRecords = [];
+  @api resetSelectedRecords(){
+    this.selectedRecords = [];
+    // reset trạng thái checkbox "Select All"
+    const selectAllCheckbox = this.template.querySelector('input[name="selectAll"]');
+    if(selectAllCheckbox) {
+      selectAllCheckbox.checked = false;
+    }
+  }
+
   handleEdit(event) {
     const Id = event.currentTarget.dataset.id;
     const studentData = this.student.find((student) => student.Id === Id);
@@ -16,22 +26,18 @@ export default class TableStudent extends LightningElement {
     const deleteEvent = new CustomEvent("deletestudent", { detail: Id });
     this.dispatchEvent(deleteEvent);
   }
-
   // Handle "Select All" checkbox
   handleSelectAll(event) {
-    console.log(event.target.checked);
     const isChecked = event.target.checked;
-    const checkboxes = this.template.querySelectorAll(
-      'input[name="selectRow"]'
-    );
+    const checkboxes = this.template.querySelectorAll('input[name="selectRow"]');
+
     this.selectedRecords = [];
     checkboxes.forEach((checkbox) => {
       checkbox.checked = isChecked;
       if (isChecked) {
-        this.selectedRecords.push(checkbox.value);
+        this.selectedRecords.push(checkbox.dataset.id);
       }
     });
-    // transfer selected records to parent component
     const editEvent = new CustomEvent("ids", { detail: this.selectedRecords });
     this.dispatchEvent(editEvent);
   }

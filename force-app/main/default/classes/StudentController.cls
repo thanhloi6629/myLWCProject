@@ -47,23 +47,22 @@ public with sharing class StudentController {
     if (String.isNotBlank(toDate)) {
       conditions.add('birthday__c <= ' + toDate);
     }
-    System.debug('conditions: ' + conditions);
 
     String baseQuery = 'SELECT Id, code__c, Name, firstName__c, lastName__c, status__c, diem1__c, diem2__c, diem3__c, birthday__c, gender__c, grade__c FROM Student__c';
 
     if (!conditions.isEmpty()) {
-      baseQuery = baseQuery + ' WHERE ' +  String.join(conditions, ' OR ');
+      baseQuery = baseQuery + ' WHERE ' +  String.join(conditions, '  AND ');
     }
 
     List<Student__c> result = Database.query(baseQuery);
     Integer totalRecords = result.size();
+    Integer offset = (pageNumber - 1) * pageSize;
    
     if (String.isNotBlank(sortField) && String.isNotBlank(sortOrder)) {
       baseQuery = baseQuery + ' ORDER BY ' + sortField + ' ' + sortOrder;
     } 
-    baseQuery = baseQuery + ' LIMIT ' + pageSize + ' OFFSET ' + pageNumber;
+    baseQuery = baseQuery + ' LIMIT ' + pageSize + ' OFFSET ' + offset;
 
-    System.debug('baseQuery: ' + baseQuery);
     List<Student__c> lst = Database.query(baseQuery);
   
     Integer totalPage = (Integer) Math.ceil( (Decimal) totalRecords / pageSize);
@@ -150,7 +149,6 @@ public with sharing class StudentController {
       );
 
       insert student;
-      System.debug('data inserted: ' + student.Id);
       return student.Id;
   }
 
@@ -179,7 +177,6 @@ public with sharing class StudentController {
       student.grade__c = grade;
 
       update student;
-      System.debug('data inserted: ' + student.Id);
       return student.Id;
   }
 

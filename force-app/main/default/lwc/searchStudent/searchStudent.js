@@ -1,4 +1,5 @@
 import { LightningElement, api } from "lwc";
+import { ShowToastEvent } from "lightning/platformShowToastEvent";
 
 export default class SearchStudent extends LightningElement {
   @api gradeOptions;
@@ -7,11 +8,23 @@ export default class SearchStudent extends LightningElement {
   @api isDisableDelete
 
   handleClick() {
+    console.log('handleClick', this.handleClick);
+    if(this.objSearch.fromDate > this.objSearch.toDate){
+      this.dispatchEvent(
+        new ShowToastEvent({
+          title: " Error",
+          message: "Từ ngày phải nhỏ hơn hoặc bằng đến ngày",
+          variant: "error"
+        })
+      );
+      return;
+    }
     const customEvent = new CustomEvent("eventsearch", {
       detail: this.objSearch
     });
     this.dispatchEvent(customEvent);
   }
+
 
   handleSortByName(event) {
     this.dispatchEvent(

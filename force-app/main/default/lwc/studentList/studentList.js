@@ -57,6 +57,7 @@ const columns = [
   { label: "Trạng Thái", fieldName: "status__c" }
 ];
 export default class StudentList extends LightningElement {
+  totalRecords;
   columns = columns;
   lstStudent = [];
   @track students = students;
@@ -79,7 +80,7 @@ export default class StudentList extends LightningElement {
     this.getGradesList();
     this.getStudentsListPagination({
       pageSize: this.pageSize,
-      pageNumber: (this.pageNumber - 1) * this.pageSize
+      pageNumber: this.pageNumber
     });
   }
 
@@ -90,9 +91,10 @@ export default class StudentList extends LightningElement {
   handleSearch(event) {
     this.objSearch = { ...event.detail };
     console.log("L-objsearch", this.objSearch);
+    this.pageNumber = 1;
     this.getStudentsListPagination({
       pageSize: this.pageSize,
-      pageNumber: (this.pageNumber - 1) * this.pageSize
+      pageNumber: this.pageNumber
     });
   }
 
@@ -110,7 +112,7 @@ export default class StudentList extends LightningElement {
     this.pageNumber = event.detail;
     this.getStudentsListPagination({
       pageSize: this.pageSize,
-      pageNumber: (this.pageNumber - 1) * this.pageSize
+      pageNumber: this.pageNumber
     });
   }
   async getGradesList() {
@@ -131,14 +133,16 @@ export default class StudentList extends LightningElement {
   async getStudentsList() {
     this.getStudentsListPagination({
       pageSize: this.pageSize,
-      pageNumber: (this.pageNumber - 1) * this.pageSize
+      pageNumber: this.pageNumber
     });
   }
 
   async getStudentsListPagination({ pageSize, pageNumber }) {
     this.isLoaded = true;
     console.log("S-this.sortOrder", this.sortOrder);
-    console.log("S-this.objSearch", this.objSearch);
+    console.log("S-this.pageSize", pageSize);
+    console.log("S-this.pageNumber", pageNumber);
+
 
     await getStudentsPagination({
       pageSize: pageSize,
@@ -154,6 +158,7 @@ export default class StudentList extends LightningElement {
         console.log("L-listPagination", result);
         this.lstStudent = result.students;
         this.totalPage = result.totalPage;
+        this.totalRecords = result.totalRecords;
       })
       .catch((err) => {
         console.log(err);
@@ -202,7 +207,7 @@ export default class StudentList extends LightningElement {
         // this.getStudentsList();
         this.getStudentsListPagination({
           pageSize: this.pageSize,
-          pageNumber: (this.pageNumber - 1) * this.pageSize
+          pageNumber: this.pageNumber
         });
       })
       .catch((err) => {
@@ -218,6 +223,8 @@ export default class StudentList extends LightningElement {
 
   changeIds(event) {
     this.ids = [...event.detail]; //["A", "B"] => ['A', 'B']
+    console.log("L-ids", this.ids);
+    console.log("L-ids-event",[...event.detail])
     if(event.detail.length > 0) {
       this.isDisableDelete = false;
     } else {
@@ -227,15 +234,32 @@ export default class StudentList extends LightningElement {
 
   //confirm xác nhân xóa nhiều record
   handleConfirmDeleteMany() {
+    console.log('this.ids:', this.ids);
+    console.log('this.pageNumber', this.pageNumber);
+
     deleteStudentByIds({ ids: this.ids })
       .then((result) => {
         console.log("L-deletemay", result);
         this.handleDeleteSuccess();
+        // // Đứng ở page cuối cùng, chọn toàn bộ record và xóa hết
+        if(this.pageNumber === this.totalPage ) {
+          const totalRecordsAfterDelete = this.totalRecords - this.ids.length;
+          if(totalRecordsAfterDelete % this.pageSize === 0 && totalRecordsAfterDelete !== 0) {
+            this.pageNumber = this.pageNumber - 1;
+          }
+        }
         this.getStudentsListPagination({
           pageSize: this.pageSize,
-          pageNumber: (this.pageNumber - 1) * this.pageSize
+          pageNumber: this.pageNumber
         });
         this.isConfirmModalOpenDeleteMany = false; // Đóng modal
+        this.isDisableDelete = true;
+        this.ids = [];
+       
+        // gửi sự kiển để reset selectedRecords trong Table Student
+        
+        this.template.querySelector("c-table-student").resetSelectedRecords();
+
       })
       .catch((err) => {
         console.log("errr", err);

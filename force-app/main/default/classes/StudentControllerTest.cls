@@ -1,24 +1,4 @@
-/**
- * This class contains unit tests for validating the behavior of Apex classes
- * and triggers.
- *
- * Unit tests are class methods that verify whether a particular piece
- * of code is working properly. Unit test methods take no arguments,
- * commit no data to the database, and are flagged with the testMethod
- * keyword in the method definition.
- *
- * All test methods in an org are executed whenever Apex code is deployed
- * to a production org to confirm correctness, ensure code
- * coverage, and prevent regressions. All Apex classes are
- * required to have at least 75% code coverage in order to be deployed
- * to a production org. In addition, all triggers must have some code coverage.
- *
- * The @isTest class annotation indicates this class only contains test
- * methods. Classes defined with the @isTest annotation do not count against
- * the org size limit for all Apex scripts.
- *
- * See the Apex Language Reference for more information about Testing and Code Coverage.
- */
+
 @isTest
 private class StudentControllerTest {
   @TestSetup
@@ -63,39 +43,7 @@ private class StudentControllerTest {
   static void testGetStudentsPagination() {
     List<Student__c> student = [SELECT Id, Name FROM Student__c];
     String gradeId = [SELECT Id FROM Grade__c LIMIT 1].Id;
-    System.debug('student: ' + student);
     Test.startTest();
-    // Integer PageSize = 5;
-    // Integer PageNumber = 1;
-    // Integer paramPageNumber = (PageNumber - 1) * PageSize ;
-    // * 1 lấy toàn bộ data
-    // * 2. Truyền data: pageSize = 2, pageNumber = ((currentPage - 1) * PageSize), currentPage là trang click vào
-    // case 2.1:  click trang đầu (pageSize = 2, pageNumber = 0 ) => output: totalRecords = 10, students.size = 2, totalPage = 5,
-    // case 2.2:  click trang 2 (pageSize = 2, pageNumber = 2 ) => output: totalRecords = 10, students.size = 2, totalPage = 5,
-    // ..
-    // case 2.4:  click trang cuối (pageSize = 2, pageNumber = 10 ) => output: totalRecords = 10, students.size = 2, totalPage = 5
-    
-      // * 3. Truyền data: Search
-    // case 3.1 lastName__c
-      // case 3.1.1:  search lastName__c = ''
-      // case 3.1.2:  search lastName__c = 'nhập sai'
-      // case 3.1.3: Nhập gần giống: input: pageSize = 2, pageNumber = 0, search lastName__c bằng tên giống nhau ở các dòng đều có trong DB
-      // case 3.1.4: Bằng chính xác 1 dòng trong DB  search
-      // input: pageSize = 2, pageNumber = 0,  lastName__c = 'Last Name 1' => output: totalRecords = 1, totalPage = 1
-    
-    // case 3.2: search grade
-      // 3.2.1 search grade có tồn tại
-    // case 3.3: search fromDate
-      // 3.3.1 search fromDate = ''
-      // 3.3.3 search fromDate = 'co gia tri'
-    // case 3.4: search toDate
-      // 3.4.1 search toDate = ''
-      // 3.4.1 search toDate = 'co gia tri'
-    // case 3.5: search fromDate ToDate
-      // case 3.5.1 search fromDate = '', toDate = ''
-      // case 3.5.1 >= fromDate, <= toDate
-    // cas 3.6 softField, sortOrder
-
      // * 1 lấy toàn bộ data
     System.assertEquals(10, student.size());
       // cas 2.1
@@ -275,7 +223,6 @@ private class StudentControllerTest {
   }
 
   // 26% test case addStudent
-
   @IsTest
   static void testAddStudent() {
     Grade__c grade = [SELECT Id FROM Grade__c LIMIT 1];
@@ -390,8 +337,6 @@ private class StudentControllerTest {
   Map<Id, Student__c> mapId = new Map<Id, Student__c>([SELECT Id FROM  Student__c LIMIT 3]);
   List<Id> studentIds =  new List<Id>(mapId.keySet());
 
-
-  System.debug('studentIds: ' + studentIds);
   System.assertEquals(3,  studentIds.size());
   Test.startTest();
   StudentController.deleteStudentByIds(studentIds);

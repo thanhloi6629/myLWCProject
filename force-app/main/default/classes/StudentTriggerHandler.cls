@@ -1,6 +1,5 @@
 public with sharing class StudentTriggerHandler {
   public static void validateStudent(List<Student__c> students) {
-    System.debug(students);
     for (Student__c student : students) {
       if (student.birthday__c == null) {
         student.addError('Hãy nhập ngày sinh');
