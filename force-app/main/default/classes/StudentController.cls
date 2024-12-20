@@ -48,7 +48,7 @@ public with sharing class StudentController {
       conditions.add('birthday__c <= ' + toDate);
     }
 
-    String baseQuery = 'SELECT Id, code__c, Name, firstName__c, lastName__c, status__c, diem1__c, diem2__c, diem3__c, birthday__c, gender__c, grade__c FROM Student__c';
+    String baseQuery = 'SELECT Id, code__c, Name, firstName__c, lastName__c, status__c, diem1__c, diem2__c, diem3__c, birthday__c, gender__c, grade__c, diemTB__c FROM Student__c';
 
     if (!conditions.isEmpty()) {
       baseQuery = baseQuery + ' WHERE ' +  String.join(conditions, '  AND ');

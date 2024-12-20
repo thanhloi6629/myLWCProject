@@ -9,8 +9,8 @@ export default class PaginationComponent extends LightningElement {
   get pageNumber() {
     return this._pageNumber;
   }
-  set pageNumber(pageNumber) {
-    this._pageNumber = pageNumber;
+  set pageNumber(value) {
+    this._pageNumber = value;
     this.calculatePages();
   }
 
@@ -18,14 +18,14 @@ export default class PaginationComponent extends LightningElement {
   get totalPage() {
     return this._totalPage;
   }
-  set totalPage(totalPage) {
-    this._totalPage = totalPage;
+  set totalPage(value) {
+    this._totalPage = value;
     this.calculatePages();
   }
 
   dispatchPageChangeEvent() {
     this.dispatchEvent(
-      new CustomEvent("changepagenumber", { detail: this._pageNumber })
+      new CustomEvent("changepagenumber", { detail: this.pageNumber })
     );
   }
 
@@ -90,9 +90,8 @@ export default class PaginationComponent extends LightningElement {
   handlePageClick(event) {
     const selectedPage = Number(event.target.dataset.page);
     if (!isNaN(selectedPage) && selectedPage !== this.pageNumber) {
-      this._pageNumber = selectedPage;
+      this.pageNumber = selectedPage;
       this.dispatchPageChangeEvent();
-      this.calculatePages();
     }
   }
   // Đặt class cho số trang hiện tại
@@ -104,17 +103,15 @@ export default class PaginationComponent extends LightningElement {
 
   handlePrevious() {
     if (this.pageNumber > 1) {
-      this._pageNumber -= 1;
+      this.pageNumber -= 1;
       this.dispatchPageChangeEvent();
-      this.calculatePages();
     }
   }
 
   handleNext() {
     if (this.pageNumber < this.totalPage) {
-      this._pageNumber += 1;
+      this.pageNumber = this.pageNumber + 1;
       this.dispatchPageChangeEvent();
-      this.calculatePages();
     }
   }
 
@@ -129,12 +126,12 @@ export default class PaginationComponent extends LightningElement {
   }
 
   handleFirstPage() {
-    this._pageNumber = 1;
+    this.pageNumber = 1;
     this.dispatchPageChangeEvent();
   }
 
   handleLastPage() {
-    this._pageNumber = this.totalPage;
+    this.pageNumber = this.totalPage;
     this.dispatchPageChangeEvent();
   }
 

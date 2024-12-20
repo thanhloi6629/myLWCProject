@@ -29,10 +29,18 @@
             </div>
           </div>
         </th>
-        <template for:each={column} for:item="student">
-          <th key={student.fieldName} class="m-1">
-            <div class="slds-truncate" title={student.label}>
-              {student.label}
+        <template for:each={columnsWithSortIcon} for:item="column">
+          <th key={column.fieldName} class="m-1">
+            <div class="slds-truncate" title={column.label} onclick={handleSort} data-field={column.fieldName}>
+              {column.label}
+              <lightning-icon
+                class="slds-m-left_x-small"
+                icon-name={column.sortIcon}
+                size="xx-small"
+                alternative-text="Sort Icon"
+                onclick={handleSort} 
+                data-field={column.fieldName}
+              ></lightning-icon>
             </div>
           </th>
         </template>

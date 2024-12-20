@@ -4,6 +4,8 @@ export default class TableStudent extends LightningElement {
   @api student;
   @api column;
   @api totalRecords;
+  @track sortedBy; // Cột được sort
+  @track sortedDirection = 'asc'; // Chiều sort ban đầu (asc hoặc desc)
   @track selectedRecords = [];
   @api resetSelectedRecords(){
     this.selectedRecords = [];
@@ -13,6 +15,42 @@ export default class TableStudent extends LightningElement {
       selectAllCheckbox.checked = false;
     }
   }
+
+  get columnsWithSortIcon() {
+    return this.column.map(column => {
+      let sortIcon = "utility:sort";
+      if(this.sortedBy === column.fieldName){
+        sortIcon =
+        this.sortedDirection === "asc"
+          ? "utility:arrowup"
+          : "utility:arrowdown";
+      }
+      return {
+        ...column,
+        sortIcon: sortIcon,
+      };
+    } );
+  }
+
+
+
+  handleSort(event) {
+    const fieldName = event.target.dataset.field;
+    const sort = this.sortedBy === fieldName && this.sortedDirection === 'asc' ? 'desc' : 'asc';
+    this.sortedDirection = sort;
+    this.sortedBy = fieldName;
+    console.log('S-fieldName:', fieldName);
+    console.log('S-sortDirection:', sort);
+
+    const sortEvent = new CustomEvent("sort", {
+      detail: { fieldName: fieldName, sortDirection: sort }
+    });
+    this.dispatchEvent(sortEvent);
+    // Gửi yêu cầu sort và phân trang đến backend
+    // this.fetchData();
+  }
+
+  
 
   handleEdit(event) {
     const Id = event.currentTarget.dataset.id;
@@ -41,6 +79,8 @@ export default class TableStudent extends LightningElement {
     const editEvent = new CustomEvent("ids", { detail: this.selectedRecords });
     this.dispatchEvent(editEvent);
   }
+
+
 
   // Handle individual row selection
   handleRowSelection(event) {
