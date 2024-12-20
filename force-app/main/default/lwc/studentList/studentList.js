@@ -204,7 +204,6 @@ export default class StudentList extends LightningElement {
       .then((result) => {
         console.log("L-delete", result);
         this.handleDeleteSuccess();
-        // this.getStudentsList();
         this.getStudentsListPagination({
           pageSize: this.pageSize,
           pageNumber: this.pageNumber
@@ -234,14 +233,11 @@ export default class StudentList extends LightningElement {
 
   //confirm xác nhân xóa nhiều record
   handleConfirmDeleteMany() {
-    console.log('this.ids:', this.ids);
-    console.log('this.pageNumber', this.pageNumber);
-
     deleteStudentByIds({ ids: this.ids })
       .then((result) => {
         console.log("L-deletemay", result);
         this.handleDeleteSuccess();
-        // // Đứng ở page cuối cùng, chọn toàn bộ record và xóa hết
+        // Đứng ở page cuối cùng, chọn toàn bộ record và xóa hết
         if(this.pageNumber === this.totalPage ) {
           const totalRecordsAfterDelete = this.totalRecords - this.ids.length;
           if(totalRecordsAfterDelete % this.pageSize === 0 && totalRecordsAfterDelete !== 0) {

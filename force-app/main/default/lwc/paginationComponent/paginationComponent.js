@@ -2,7 +2,7 @@ import { LightningElement, api, track } from "lwc";
 
 export default class PaginationComponent extends LightningElement {
   _totalPage;
-  _pageNumber = [];
+  _pageNumber;
   @api pageSize;
   @track pages = []; /// danh sách số trang
   @api
@@ -11,6 +11,7 @@ export default class PaginationComponent extends LightningElement {
   }
   set pageNumber(pageNumber) {
     this._pageNumber = pageNumber;
+    this.calculatePages();
   }
 
   @api
@@ -38,7 +39,8 @@ export default class PaginationComponent extends LightningElement {
     this.pages.push({
       key: "page-1",
       number: 1,
-      isEllipsis: false
+      isEllipsis: false,
+      class: `slds-button page-number ${this.pageNumber === 1 ? "active" : ""}`
     });
 
     // Tính khoảng hiển thị xung quanh `pageNumber`
