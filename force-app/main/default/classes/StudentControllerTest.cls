@@ -348,4 +348,13 @@ private class StudentControllerTest {
     ];
     System.assertEquals(0, deletedStudent.size());
   }
+
+  @IsTest
+  static void testUpdateGrade() {
+    Test.startTest();
+    List<Student__c> student = StudentController.updateGrade();
+    Test.stopTest();
+    System.assertEquals(1,  student.size());
+    System.debug('student: ' + student);
+  }
 }

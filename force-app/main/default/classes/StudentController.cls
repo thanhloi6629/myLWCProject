@@ -194,5 +194,13 @@ public with sharing class StudentController {
     return ids;
   }
 
+  @AuraEnabled
+  public static void sendMailStudentFall () {
+    List<Student__c> students = [SELECT Id, Name, Parents_Email__c FROM Student__c WHERE status__c = 'Rớt'];
+    System.debug('Mon: ' + students); 
+    for( Student__c student : students){
+      EmailManager.sendMail(student.Parents_Email__c, 'THÔNG BÁO ĐẾN PHỤ HUYNH HỌC SINH', 'Thông báo Con bạn thi rớt');
+    }
+  }
 }
 

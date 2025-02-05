@@ -1,0 +1,15 @@
+.student-row.fail-row {
+    background-color: #ffe6e6; /* Màu đỏ nhạt cho học sinh rớt */
+    color: #d0021b; /* Màu chữ đỏ */
+}
+
+.student-row.pass-row {
+    background-color: #ffffff; /* Màu xanh nhạt cho học sinh đậu */
+    color: #4caf50; /* Màu chữ xanh */
+}
+.d-flex {
+    display: flex;
+}
+.slds-grid_align-space-between {
+    justify-content: space-between;
+}

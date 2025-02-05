@@ -1,4 +1,6 @@
 import { LightningElement, api, track } from "lwc";
+import sendMailStudentFall from "@salesforce/apex/StudentController.sendMailStudentFall";
+import { ShowToastEvent } from "lightning/platformShowToastEvent";
 
 export default class TableStudent extends LightningElement {
   @api student;
@@ -14,6 +16,13 @@ export default class TableStudent extends LightningElement {
     if(selectAllCheckbox) {
       selectAllCheckbox.checked = false;
     }
+  }
+
+  get getStudent() {
+    return this.student.map((st) => ({
+      ...st,
+      color: st.status__c === "Rớt" ? "student-row fail-row" : "student-row pass-row"
+    }));
   }
 
   get columnsWithSortIcon() {
@@ -32,6 +41,14 @@ export default class TableStudent extends LightningElement {
     } );
   }
 
+  sendMailStudentFall(){
+    try {
+      sendMailStudentFall();
+      this.handleSendMailSuccess();
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
 
   handleSort(event) {
@@ -103,6 +120,16 @@ export default class TableStudent extends LightningElement {
     const editEvent = new CustomEvent("ids", { detail: this.selectedRecords });
     this.dispatchEvent(editEvent);
   }
+
+   handleSendMailSuccess() {
+      this.dispatchEvent(
+        new ShowToastEvent({
+          title: "Success",
+          message: "Send mail success!",
+          variant: "success"
+        })
+      );
+    }
 
   // getContactField(contact, fieldName) {
   //     return contact[fieldName];
