@@ -1,0 +1,59 @@
+.edit-mode-shadow {
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    transition: box-shadow 0.3s ease-in-out;
+}
+.custom-email {
+    color: #0070d2;
+    text-decoration: none;
+}
+.custom-icon {
+    cursor: pointer; /* ✅ Thêm cursor: pointer khi hover */
+    transition: transform 0.2s ease;
+}
+
+.lightning-icon:hover {
+    color: #0070d2;
+    transform: scale(1.2);
+    transition: transform 0.2s ease;
+    cursor: pointer; /* ✅ Thêm cursor: pointer khi hover */
+}
+
+.custom-email:hover {
+    text-decoration: underline;
+}
+
+:host {
+    --slds-c-accordion-heading-text-color: #181818;
+    --slds-c-accordion-heading-text-color-hover: #181818;
+    --slds-c-accordion-summary-color-background: #f3f3f3;
+    --slds-c-accordion-summary-color-background-hover: #e8e8e8;
+
+}
+
+.black-accordion .slds-accordion__summary-heading {
+    color: #181818 !important;
+    font-weight: bold;
+}
+
+.black-accordion .slds-accordion__summary-action:hover {
+    color: #181818 !important;
+    /* background-color: #e8e8e8; */
+}
+
+.black-accordion .slds-accordion__summary-action:focus {
+    color: #181818 !important;
+}
+
+.black-accordion .slds-button:focus {
+    box-shadow: 0 0 3px #181818;
+}
+
+.black-accordion .slds-accordion__section {
+    padding: 0;
+}
+.tall-textarea textarea {
+    min-height: 120px;
+}
+/* .black-accordion .slds-accordion__summary-action-icon {
+    fill: #000000 !important;
+} */

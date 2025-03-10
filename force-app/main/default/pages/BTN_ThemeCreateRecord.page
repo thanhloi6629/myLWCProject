@@ -1,0 +1,235 @@
+<apex:page controller="ThemeController" showHeader="false" sidebar="false">
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 100vh;
+        }
+        .slds-form.custom-center {
+            width: 800px;
+            margin: auto;
+            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        }
+        .wrapper-input-tag {
+            margin: 16px 40px;
+        }
+        .button-footer {
+            padding: 12px;
+            background: #F4F4F4;
+            border-top: solid 2px #c9c9c9; 
+            padding-right: 4px;
+        }
+        .header-title {
+            text-align: center;
+            font-size: 20px;
+            /* padding: 12px; */
+            /* border-bottom: solid 2px #c9c9c9; */
+        }
+        .error-message {
+            color: red;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+        /* .popup-content{
+            position: relative;
+        } */
+        .slds-form.custom-center {
+            display: block; /* Hiển thị mặc định */
+        }
+        .slds-modal__close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: white;
+            border: none;
+            cursor: pointer;
+            z-index: 1000;
+        }
+   
+        .slds-scope .slds-modal__header .slds-modal__close {
+            position: absolute;
+            top: -2.75rem;
+            right: -0.05rem;
+            /* margin-left: 0; */
+            background-color: white;
+        } 
+
+        .slds-input:focus, 
+        .slds-textarea:focus {
+            border-color: #1589EE !important; /* Màu xanh SLDS */
+            box-shadow: 0 0 3px #1589EE !important;
+            outline: none !important;
+        }
+        .slds-select:focus {
+            border-color: #1589EE !important; /* Màu xanh mặc định của Salesforce */
+            box-shadow: 0 0 3px #1589EE !important;
+            outline: none !important;
+        }
+
+        .popup {
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #A3A3A3;
+            z-index: 999;         
+        }
+        .info {
+            font-size: 14px;     
+            padding: 6px 12px;
+            margin: 6px 12px;
+            background-color: #F4F4F4;
+            border-radius: 5px;
+        }
+        .popup.active {
+            display: block;
+        }
+        .popup-content {
+            position: relative;
+            z-index: 999;
+            background: white;
+            /* padding: 20px; */
+            border-radius: 5px;
+        }
+
+    </style>
+    <head>
+        <apex:slds />
+        
+    </head>
+
+    <body class="slds-scope">
+        <div id="overlay" class="popup"></div>
+        <apex:form id="myForm" >
+            <div class="container">
+                <div class="slds-form custom-center popup-content">
+                        <div class="modal-header slds-modal__header empty slds-modal__header_empty">
+                            <button onclick="callApexCancel();" type="button" title="Cancel and close" class="slds-button slds-button_icon slds-modal__close closeIcon slds-button_icon-bare" data-aura-rendered-by="1104:0">
+                                <lightning-primitive-icon variant="bare" data-aura-rendered-by="1105:0" lwc-3bq099ugqsh-host="">
+                                    <svg focusable="false" aria-hidden="true" viewBox="0 0 520 520" part="icon" lwc-3bq099ugqsh="" data-key="close" class="slds-button__icon slds-button__icon_large">
+                                    <g lwc-3bq099ugqsh=""><path d="M310 254l130-131c6-6 6-15 0-21l-20-21c-6-6-15-6-21 0L268 212a10 10 0 01-14 0L123 80c-6-6-15-6-21 0l-21 21c-6 6-6 15 0 21l131 131c4 4 4 10 0 14L80 399c-6 6-6 15 0 21l21 21c6 6 15 6 21 0l131-131a10 10 0 0114 0l131 131c6 6 15 6 21 0l21-21c6-6 6-15 0-21L310 268a10 10 0 010-14z" lwc-3bq099ugqsh=""></path>
+                                    </g>
+                                </svg>
+                                </lightning-primitive-icon><span class="slds-assistive-text" data-aura-rendered-by="1107:0">Cancel and close</span>
+                            </button>
+                            <div class="header-title">Create record theme</div>
+                        </div>
+                        <div class="slds-text-align_right">
+                            <label class="slds-form-element__label">
+                                <abbr class="slds-required" title="required">* </abbr> = Required Information
+                            </label>
+                        </div>
+                    <div class="info"> Information</div>
+                   
+                    <div class="wrapper-input-tag">
+                        <!-- Record Type -->
+                        <div class="slds-form-element slds-form-element_horizontal">
+                            <label class="slds-form-element__label">
+                                <abbr class="slds-required" title="required">* </abbr>Record Type
+                            </label>
+                            <div class="slds-form-element__control">
+                                <!-- <apex:selectList styleClass="slds-select" id="recordType" value="{!selectedRecordTypeId}" size="1" style="width: 100%; height: 30px" required="true">
+                                    <apex:selectOptions value="{!recordTypeOptions}" />
+                                </apex:selectList> -->
+                                <apex:selectList styleClass="slds-select"  value="{!selectedRecordTypeId}" id="recordType" size="1" style="width: 100%; height: 30px" required="true" >
+                                    <apex:selectOptions value="{!recordTypes}" />
+                                </apex:selectList>
+                                <div id="errRecordType" class="error-message"></div>
+
+                            </div>
+                        </div>
+
+                        <!-- Name -->
+                        <div class="slds-form-element slds-form-element_horizontal">
+                            <label class="slds-form-element__label">
+                                <abbr class="slds-required" title="required">* </abbr>Name
+                            </label>
+                            <div class="slds-form-element__control">
+                                <apex:inputField styleClass="slds-input" value="{!themeRecord.Name}" html-oninput="validateInputs();" id="name" style="width: 100%; height: 30px"  />
+                                <div id="errName" class="error-message"></div>
+                            </div>
+                        </div>
+
+                        <!-- Update Contents -->
+                        <div class="slds-form-element slds-form-element_horizontal">
+                            <label class="slds-form-element__label">
+                                <abbr class="slds-required" title="required">* </abbr>Update Contents
+                            </label>
+                            <div class="slds-form-element__control">
+                                <apex:inputTextarea styleClass="slds-input" id="updateContents" value="{!themeRecord.Update_Content__c}" style="width: 100%;" />
+                                <div id="errUpdateContents" class="error-message"></div>
+                            </div>
+                        </div>
+
+                       
+                    </div>
+                     <!-- Buttons -->
+                     <div class="button-footer slds-text-align_center">
+                        <apex:commandButton value="Cancel" action="{!cancel}" styleClass="slds-button slds-button_neutral" immediate="true" />
+                        <apex:commandButton value="Save" action="{!saveRecord}" styleClass="slds-button slds-button_brand" onClick="return validateInputs();" />
+                    </div>
+                </div>
+            </div>
+            <div id="spinner" class="slds-spinner_container slds-is-relative slds-hide" >
+                <div role="status" class="slds-spinner slds-spinner--large slds-spinner--brand">
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+            <apex:actionFunction name="callApexCancel" action="{!cancel}" immediate="true"/>
+        </apex:form>
+    </body>
+
+    <script type="text/javascript">
+        window.onload = function() {
+            setTimeout(function() {
+                document.activeElement.blur(); // Bỏ focus khỏi phần tử đang được chọn
+            }, 100); 
+        };
+        function validateInputs() {
+           
+            let isValid = true;
+
+            // Validate Name (Chỉ chấp nhận ký tự Nhật Bản và số full-width)
+            // Validate Name (Chỉ chấp nhận ký tự Nhật Bản và số full-width)
+            var nameField = document.querySelector("[id$='name']").value;
+            var japaneseRegex = /^[\u3000-\u30FF\u4E00-\u9FFF\uFF10-\uFF19]+$/; 
+            // Giải thích regex:
+            // \u3000-\u30FF  → Hiragana & Katakana
+            // \u4E00-\u9FFF  → Kanji
+            // \uFF10-\uFF19  → Số full-width (０-９)
+            // Dấu "+" → Cho phép nhập bao nhiêu ký tự cũng được (miễn là hợp lệ)
+
+            if (!japaneseRegex.test(nameField)) {
+                document.getElementById("errName").innerHTML = "Only Japanese characters and full-width numbers (０-９) are allowed.";
+                isValid = false;
+            } else {
+                document.getElementById("errName").innerHTML = "";
+            }
+
+            // Validate Record Type
+            var recordTypeField = document.querySelector("[id$='recordType']").value;
+            if (!recordTypeField) {
+                document.getElementById("errRecordType").innerHTML = "Please select a record type.";
+                isValid = false;
+            } else {
+                document.getElementById("errRecordType").innerHTML = "";
+            }
+
+            // Validate Update Contents
+            var updateContentsField = document.querySelector("[id$='updateContents']").value;
+            if (!updateContentsField || updateContentsField.length < 10) {
+                document.getElementById("errUpdateContents").innerHTML = "Update Contents must be at least 10 characters long.";
+                isValid = false;
+            } else {
+                document.getElementById("errUpdateContents").innerHTML = "";
+            }
+
+            return isValid;
+        }
+
+    </script>
+</apex:page>
